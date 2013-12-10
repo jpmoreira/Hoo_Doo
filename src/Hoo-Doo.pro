@@ -13,7 +13,8 @@ solve(SolvedBoard,Side,Transparent):-
         DesiredSize is Side*Side,
         generateFlatList(Board,DesiredSize),
         applyConstraints(Board,Side,Transparent),
-        labeling([], Board).
+        labeling([], Board),
+        SolvedBoard=Board.
 
 
         
