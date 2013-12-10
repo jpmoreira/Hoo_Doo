@@ -13,7 +13,8 @@ applyConstraints(FlatBoard,Side,UseTransparent):-
         
         %apply domain constraints
         (UseTransparent = 0,!,domain(FlatBoard,1,Side);domain(FlatBoard,0,Side)),
-        applyLineConstraints(FlatBoard,Side).
+        inflate(Inflated, FlatBoard,Side),
+        applyLineConstraints(Inflated).
         
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,19 +22,58 @@ applyConstraints(FlatBoard,Side,UseTransparent):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Apply Line Constraints
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
-applyLineConstraints(Board,Side):-
-        applyLineConstraints(Board,Side,0).
+applyLineConstraints([BoardHead|BoardTail]):-
+        all_distinct(BoardHead),
+        applyLineConstraints(BoardTail).
 
-applyLineConstraints(Board,Side,CurrentLine):-
-        ActualLineNumber is CurrenwtLine+1.
+applyLineConstraints([LastLine]):-
+        all_distinct(LastLine).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-test(X,B):-
-        domain(X,1,3),
-        element(1,X,First),
-        element(2,X,Second),
-        element(3,X,Third),
-        NewX = [[First,Second],Third],
-        nth1(1,NewX,B).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Get Columns
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+getColumn(Board,Col,ColNr):-
+        getColumn(Board,Col,ColNr,[]).
+
+getColumn([BoardHead|BoardTail],Col,ColNr,Tmp):-
+        nth0(ColNr,BoardHead,Elem),
+        append(Tmp,[Elem],NewTmp),
+        getColumn(BoardTail,Col,ColNr,NewTmp).
+getColumn([],Col,_,Tmp):-
+        Col = Tmp.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Apply Column Constraints
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+applyColumnConstraints(Board,Side):-
+        applyColumnConstraints(Board,Side,0).
+
+applyColumnConstraints(Board,Side,Nr):-
+        Nr<Side,
+        getColumn(Board,Col,Nr),
+        all_distinct(Col),
+        NewNr is Nr+1,
+        applyColumnConstraints(Board,Side,NewNr).
+applyColumnConstraints(_,Side,Side).
         
-                
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Find l Diagonal
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+getLDiagonal(Side,FlatBoard,Diagonal,DiagonalNr):-
+        FirstPos is
+        getDiagonal(Side,FlatBoard,Diagonal,DiagonalNr,[],FirstPos).
+
+getDiagonal(Side,Board,Diagonal,DiagonalNr,Tmp,CurrentPos):-
+        NewPos 
+        
+        
