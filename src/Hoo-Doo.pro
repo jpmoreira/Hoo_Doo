@@ -6,6 +6,7 @@
 %%%%%4X4 [[1,a,c,v],[,e,3,4,5],[,a,s,d,y],[l,k,j,h]]
 
 :-include('flat_2D_convert.pro').
+:-include('tabPrint.pro').
 
 
 executeMenuCommand('1',ok).
@@ -17,7 +18,12 @@ menu:-
         write('1- Choose Size of the board\n'),
         write('2- Exit\n').
 
-%checkValidSize(Size):-
+
+
+checkValidSize(Size, Ok):-
+        Size < 0,
+        Size > 25, Ok=bad.
+checkValidSize(Size, ok).
 
 getSize(Size):-
         write('Insert the size of the board you wish to play followed by "."'), nl,
@@ -28,12 +34,15 @@ start:-
         write('############Hoo-Doo##########\n'), nl,
         menu, 
         get_char(Input),
-        get_char(_),%consume enter key
+        get_char(_), %consume enter key
         executeMenuCommand(Input,Output),
         Output=ok,
         getSize(Size),
-        %verificarSizeValido
-        solve(Size).
+        checkValidSize(Size, Is_ok),
+        Is_ok= ok,
+        solve(SolveBoard, Size, 0),
+        print_tab(SolveBoard).
+
 
 
 solve(SolvedBoard,Side,Transparent):-
