@@ -8,6 +8,33 @@
 :-include('flat_2D_convert.pro').
 
 
+executeMenuCommand('1',ok).
+executeMenuCommand('4',ok):-halt.
+executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
+
+
+menu:-
+        write('1- Choose Size of the board\n'),
+        write('2- Exit\n').
+
+%checkValidSize(Size):-
+
+getSize(Size):-
+        write('Insert the size of the board you wish to play followed by "."'), nl,
+        read(Size), nl.
+
+
+start:-
+        write('############Hoo-Doo##########\n'), nl,
+        menu, 
+        get_char(Input),
+        get_char(_),%consume enter key
+        executeMenuCommand(Input,Output),
+        Output=ok,
+        getSize(Size),
+        %verificarSizeValido
+        solve(Size).
+
 
 solve(SolvedBoard,Side,Transparent):-
         DesiredSize is Side*Side,
