@@ -21,6 +21,18 @@ Este projecto consiste na implementação de um \textit{solver} para o jogo de t
 With this chapter, the preliminaries are over, and we begin the
 search for periodic solutions \dots
 %
+\section{Visualiza\c{c}\~{a}o}
+%
+Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primerio predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas. Este predicado calcula o comprimento da lista, que determina o número de linhas, colunas e respectivos índices a serem imprimidos, e de seguida passa-os como argumentos  para as funções auxiliares que controlam a impressão, descritas em baixo.
+
+\begin{itemize}
+\item \textit{print\_tab\_aux(+Board,?LineI,?ColumnI)}: coordena a utilização dos seguintes predicados para a construção visual do tabuleiro.
+\item \textit{tab\_map(+Symb)}: Imprime o número ou correspondente no tabuleiro.
+\item \textit{print\_line(+Line)}: imprime uma linha do tabuleiro, fazendo uso do tab\_map(+Symb) para a impressão numérica.
+\item \textit{print\_empty\_line(+Length)}: imprime uma linha horizontal.
+\item \textit{print\_column\_index(+ASCIICode,+Index)}: imprime o índice das colunas.
+\end{itemize}
+
 \subsection{Autonomous Systems}
 %
 In this section we will consider the case when the Hamiltonian

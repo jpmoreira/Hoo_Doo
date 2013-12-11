@@ -22,6 +22,16 @@ solve(SolvedBoard,Side,Transparent):-
 %Generate List
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 generateFlatList(Board,DesiredSize):-
+        Index is 0,
+        generateFlatListAux(DesiredSize, Index, [], Board).
+        
+        
+generateFlatListAux(DesiredSize, DesiredSize, Board, Board).
+
+generateFlatListAux(DesiredSize, Index, Progress, Board):-
+                append(Progress, [_], Nprogress),
+                Next_index is Index+1,
+                generateFlatListAux(DesiredSize,Next_index, Nprogress, Board).
         
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
