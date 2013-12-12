@@ -7,44 +7,79 @@
 
 \title{Hoo-Doo Solver}
 
-\author{Daniel Mendonça \and Jos\'{e} Pedro Moreira}
+\author{Daniel Mendon\c{c}a \and Jos\'{e} Pedro Moreira}
 
 \institute{FEUP-PLOG, Turma 3MIEIC9, Grupo 123}
 
 \maketitle
 %
 \begin{abstract}
-Este projecto consiste na implementação de um \textit{solver} para o jogo de tabuleiro \textit{Hoo-Doo}. O solver funciona para uma dimensão arbitrária do tabuleiro. A implementação foi feita usando Prolog, mas concretamente a plataforma \emph{Sicstus Prolog}  tendo sido usados para tal os módulos desta mesma ferramenta para Pragramação em Lógica com Restrições sobre domínios finitos.
+Este projecto consiste na implementa\c{c}\~{a}o de um \textit{solver} para o jogo de tabuleiro \textit{Hoo-Doo}. O solver funciona para uma dimens\~{a}o arbitr\'{a}ria do tabuleiro. A implementa\c{c}\~{a}o foi feita usando Prolog, mas concretamente a plataforma \emph{Sicstus Prolog}  tendo sido usados para tal os m\'{o}dulos desta mesma ferramenta para Pragrama\c{c}\~{a}o em L\'{o}gica com Restri\c{c}\~{o}es sobre dom\'{i}nios finitos.
 \end{abstract}
 %
 \section{Introdu\c{c}\~{a}o}
 %
-A realização deste trabalho teve como um dos objectivos, perceber a importância e utilidade da Programa em Lógica com restrições. Outro dos objectivos foi o uso e conhecimento de bibliotecas do SICStus, que auxiliam na resolução dos problemas existentes e o alcance dos seus predicados, que, por vezes, mesmo não estando directamente relacionados com um problema em concreto, sendo interpretados de formas alternativas se tornam bastante úteis, quer na simplificação do problema, quer na procura da sua resolução.
-O Hoo-Doo, dependendo da sua dimensão, pode ter várias, uma ou até nenhuma resolução se não forem usadas pegs transparentes(peg é uma peça de cor, será explicado em detalhe na descrição do jogo). Quando foi lançado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ à primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a pegs transparentes, e, os elementos do grupo acharam que seria interessante e até certo ponto divertido verificar como a implementação deste jogo em Prolog, usando restrições seria uma mais valia para vencer o prémio que era na altura oferecido. A pouca informação encontrada sobre este jogo de tabuleiro também despertou curiosidade.
+A realiza\c{c}\~{a}o deste trabalho teve como um dos objectivos, perceber a import\^{a}ncia, pot\^{e}ncialidades e utilidade da Programa\c{c}\~{a}o em L\'{o}gica com restri\c{c}\~{o}es. Outro dos objectivos foi o uso e conhecimento de bibliotecas do SICStus, que auxiliam na resolu\c{c}\~{a}o dos problemas existentes e o alcance dos seus predicados, que, por vezes, mesmo n\~{a}o estando directamente relacionados com um problema em concreto, sendo interpretados de formas alternativas se tornam bastante \'{u}teis, quer na simplifica\c{c}\~{a}o do problema, quer na procura de uma resolu\c{c}\~{a}o mais eficiente.
+O Hoo-Doo, dependendo da sua dimens\~{a}o, pode ter v\'{a}rias, uma ou at\'{e} nenhuma resolu\c{c}\~{a}o se n\~{a}o forem usadas \emph{pegs} transparentes(peg \'{e} uma pe\c{c}a de cor, ser\'{a} explicado em detalhe na descri\c{c}\~{a}o do jogo). Quando foi lan\c{c}ado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ \`{a} primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a \emph{pegs} transparentes, e, os elementos do grupo acharam que seria interessante e at\'{e} certo ponto divertido verificar como a implementa\c{c}\~{a}o deste jogo em Prolog, usando restri\c{c}\~{o}es seria uma mais valia para vencer o pr\'{e}mio que era na altura oferecido. A pouca informa\c{c}\~{a}o encontrada sobre este jogo de tabuleiro tamb\'{e}m despertou curiosidade.
  \dots
+ O trabalho desenvolvido pelos elementos do grupo tem três partes distintas:
+ \begin{itemize}
+\item Parte de visualiza\c{c}\~{a}o do jogo, em muito semelhante ao j\'{a} desenvolvido num outra trabalho para a disciplina.
+\item Parte do \emph{solver}, que resolve o tabuleiro que lhe \'{e} passado
+\item Parte de convers\~{a}o de tabuleiro \emph{flat} para tabuleiro bi-dimensional e vice-versa.
+\end{itemize}
+
+Na implementa\c{c}\~{a}o do jogo \'{e} suportado o funcionamento em dois modos, um que n\~{a}o usa \emph{pegs} transparentes, e outro que usa, tentando no entanto minimizar a sua utiliza\c{c}\~{a}o.
 
 %
 
 \section{Descri\c{c}\~{a}o}
 %
-O jogo Hoo-Doo foi criado pela empresa(?) Tryne Games, lançado na década de 50. Hoo-Doo é um jogo de tabuleiro, para um único jogador, normalmente quadrado e que tem pelo menos tantas cores quanto o número de colunas no tabuleiro, e o numero de pegs(peg é a designação de uma peça no jogo Hoo-Doo) de cada cor também é o numero de colunas do tabuleiro. Os tamanhos de tabuleiro mais frequentes são os de 4x4, 6x6 e 8x8. O jogo tem como início um tabuleiro vazio, e o objectivo é preencher todas as posições do tabuleiro com as pegs disponíveis, sem nunca repetir peças da mesma cor quer na mesma linha, coluna, ou qualquer uma das diagonais. Para auxiliar na resolução do tabuleiro, existem as denominadas pegs transparentes, cuja sua característica é preencher uma posição sem lhe atribuir uma cor. O uso de pegs transparentes é absolutamente necessário para a resolução de tabuleiros com determinados tamanhos, cuja resolução é possível apenas com o uso de pegs transparentes(como exemplo temos um tabuleiro de 6x6, que é impossível resolver mesmo com duas pegs transparentes). Será sempre considerada a melhor resolução, aquela que usar menos pegs transparentes, sendo portanto esse, o parâmetro de optimização.
-
+O jogo Hoo-Doo foi criado pela empresa(?) Tryne Games, lan\c{c}ado na d\'{e}cada de 50. Hoo-Doo \'{e} um jogo de tabuleiro, para um \'{u}nico jogador, normalmente quadrado e que tem pelo menos tantas cores quanto o n\'{u}mero de colunas no tabuleiro, e o numero de \emph{\emph{pegs}} de cada cor tamb\'{e}m \'{e} o numero de colunas do tabuleiro. Os tamanhos de tabuleiro mais frequentes s\~{a}o os de 4x4, 6x6 e 8x8. O jogo tem como in\'{i}cio um tabuleiro vazio, e o objectivo \'{e} preencher todas as posi\c{c}\~{o}es do tabuleiro com as \emph{pegs} dispon\'{i}veis, sem nunca repetir pe\c{c}as da mesma cor na mesma linha, coluna, ou qualquer uma das diagonais. Para auxiliar na resolu\c{c}\~{a}o do tabuleiro, existem as denominadas \emph{pegs} transparentes, cuja caracter\'{i}stica \'{e} preencher uma posi\c{c}\~{a}o sem lhe atribuir uma cor. O uso de \emph{pegs} transparentes \'{e} absolutamente necess\'{a}rio para a resolu\c{c}\~{a}o de tabuleiros com determinados tamanhos, cuja resolu\c{c}\~{a}o \'{e} poss\'{i}vel apenas com o uso de \emph{pegs} transparentes(como exemplo temos um tabuleiro de 6x6, que \'{e} imposs\'{i}vel resolver mesmo com duas \emph{pegs} transparentes). \'{E} sempre considerada como a melhor resolu\c{c}\~{a}o, aquela que usar menos \emph{pegs} transparentes.
 
 
 
 
 \section{Visualiza\c{c}\~{a}o}
 %
-Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primeiro predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas. Este predicado calcula o comprimento da lista, que determina o número de linhas, colunas e respectivos índices a serem imprimidos, e de seguida passa-os como argumentos  para as funções auxiliares que controlam a impressão, descritas em baixo.
+Existem seis predicados utilizados para a constru\c{c}\~{a}o visual do tabuleiro em modo de texto. O primeiro predicado a ser executado \'{e} o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas. Este predicado calcula o comprimento da lista, que determina o n\'{u}mero de linhas, colunas e respectivos \'{i}ndices a serem imprimidos, e de seguida passa-os como argumentos  para as fun\c{c}\~{o}es auxiliares que controlam a impress\~{a}o, descritas em baixo.
 
 \begin{itemize}
-\item \textit{print\_tab\_aux(+Board,?LineI,?ColumnI)}: coordena a utilização dos seguintes predicados para a construção visual do tabuleiro.
-\item \textit{tab\_map(+Symb)}: Imprime o número ou correspondente no tabuleiro.
-\item \textit{print\_line(+Line)}: imprime uma linha do tabuleiro, fazendo uso do tab\_map(+Symb) para a impressão numérica.
+\item \textit{print\_tab\_aux(+Board,?LineI,?ColumnI)}: coordena a utiliza\c{c}\~{a}o dos seguintes predicados para a constru\c{c}\~{a}o visual do tabuleiro.
+\item \textit{tab\_map(+Symb)}: Imprime o n\'{u}mero ou correspondente no tabuleiro.
+\item \textit{print\_line(+Line)}: imprime uma linha do tabuleiro, fazendo uso do tab\_map(+Symb) para a impress\~{a}o num\'{e}rica.
 \item \textit{print\_empty\_line(+Length)}: imprime uma linha horizontal.
-\item \textit{print\_column\_index(+ASCIICode,+Index)}: imprime o índice das colunas.
+\item \textit{print\_column\_index(+ASCIICode,+Index)}: imprime o \'{i}ndice das colunas.
 \end{itemize}
 
+\section{Vari\'{a}veis de Decis\~{a}o}
+
+Para modelar o problema em causa, usamos uma vari\'{a}vel por cada posi\c{c}\~{a}o no tabuleiro, perfazendo para um tabuleiro $n * m$, $n * m$ vari\'{a}veis.O dom\'{i}nio dessas vari\'{a}veis depende tamb\'{e}m ele do tamanha do tabuleiro, sendo que existem para cada tipo de tabuleiro dois dom\'{i}nios distintos dependendo de o jogo ser resolvido usando pe\c{c}as transparentes ou n\~{a}o.
+Para o caso de serem usadas pe\c{c}as transparentes o dom\'{i}nio de cada uma das vari\'{a}veis \'{e} $[0,n]$.
+No caso de se recorrer somente a pe\c{c}as com cor o dom\'{i}nio de cada uma das vari\'{a}veis passa a ser $[1,n]$.
+
+No caso de o jogo ser resolvido recorrendo aos \emph{pegs} transparentes \'{e} ainda utilizada uma vari\'{a}vel extra, que \'{e} a soma do valor de todas as outras. Na resoluç\~{a}o do jogo tentar-se-\'{a} minimizar o valor desta vari\'{a}vel que tem um dom\'{i}nio que \'{e} $[0,n^3]$ num tabuleiro de $n * m$ onde n \'{e} a maior dimens\~{a}o. 
+
+\section{Restri\c{c}\~{o}es}
+
+Tratando-se de um jogo todas as restri\c{c}\~{o}es que inclu\'{i}mos s\~{a}o r\'{i}gidas, \'{a} excep\c{c}\~{a}o de uma.
+As restri\c{c}\~{o}es r\'{i}gidas s\~{a}o:
+
+\begin{itemize}
+\item A restri\c{c}\~{a}o que impede que duas pe\c{c}as da mesma linha tenham valores iguais
+\item A restri\c{c}\~{a}o que impede que duas pe\c{c}as da mesma coluna tenham valores iguais
+\item A restri\c{c}\~{a}o que impede que duas pe\c{c}as da mesma diagonal tenham valores iguais
+\end{itemize}
+
+A restri\c{c}\~{a}o flex\'{i}vel, diz respeito \'{a} tentativa de minimizar o n\'{u}mero de pe\c{c}as transparentes envolvidas na resolu\c{c}\~{a}o do tabuleiro (que \'{e} por si tamb\'{e}m um dos objectivos do jogo).
+
+A implementa\c{c}\~{a}o das restri\c{c}\~{o}es r\'{i}gidas \'{e} feita agrupando as vari\'{a}veis em listas, ora por linha, ora por coluna, ora por diagonal , e chamando o predicado all\_distinct sobre essas listas, obrigando assim que nunca hajam duas pe\c{c}as que partilhem a mesma linha/coluna/diagonal que tenham o mesmo valor.
+
+A implementa\c{c}\~{a}o da restri\c{c}\~{a}o flex\'{i}vel, \'{e} feita pela introdu\c{c}\~{a}o de uma vari\'{a}vel antes do \emph{labeling}, a qual se passa ao predicado sum para que represente a soma do valor de todas as vari\'{a}veis do tabuleiro. Ap\'{o}s a aplica\c{c}\~{a}o desta restri\c{c}\~{a}o o \emph{labeling} \'{e} chamado dentro do \emph{min}, permitindo assim obter a solu\c{c}\~{a}o cuja soma dos valores das pe\c{c}as \'{e} maior, valor esse que necess\'{a}riamente inclui o menor n\'{u}mero poss\'{i}vel de pe\c{c}as transparente (pe\c{c}as com o valor zero).
+
+\section{Estrat\'{e}gia de Pesquisa}
+
+A estrat\'{e}gia utilizada para a etiquetarem das vari\'{a}veis foi tentar atribuir valores primeiro, aquelas que est\~{a}o mais restritas por forma a tentar minimizar a \'{a}rvore de pesquisa, "cortando" n\'{o}s o mais cedo poss\'{i}vel. Isto \'{e} conseguido usando a op\c{c}\~{a}o \emph{ffc} que tentar atribuir valores primeiro as vari\'{a}veis com um dom\'{i}nio menor, sendo que o crit\'{e}rio de desempate seleciona a vari\'{a}vel com mais restri\c{c}\~{o}es suspensas.
 
 
 
