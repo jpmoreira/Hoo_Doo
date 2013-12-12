@@ -20,14 +20,14 @@ Este projecto consiste na implementação de um \textit{solver} para o jogo de t
 \section{Introdu\c{c}\~{a}o}
 %
 A realização deste trabalho teve como um dos objectivos, perceber a importância e utilidade da Programa em Lógica com restrições. Outro dos objectivos foi o uso e conhecimento de bibliotecas do SICStus, que auxiliam na resolução dos problemas existentes e o alcance dos seus predicados, que, por vezes, mesmo não estando directamente relacionados com um problema em concreto, sendo interpretados de formas alternativas se tornam bastante úteis, quer na simplificação do problema, quer na procura da sua resolução.
-O Hoo-Doo, dependendo da sua dimensão, pode ter várias, uma ou até nenhuma resolução se não forem usadas pegs transparentes(peg é uma peça de cor, será explicado em detalhe na descrição do jogo). Quando foi lançado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ à primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a pegs transparentes, e, os elementos do grupo acharam que seria interessante e até certo ponto divertido verificar como a implementação deste jogo em Prolog, usando restrições seria uma mais valia para vencer o prémio que era na altura oferecido.
+O Hoo-Doo, dependendo da sua dimensão, pode ter várias, uma ou até nenhuma resolução se não forem usadas pegs transparentes(peg é uma peça de cor, será explicado em detalhe na descrição do jogo). Quando foi lançado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ à primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a pegs transparentes, e, os elementos do grupo acharam que seria interessante e até certo ponto divertido verificar como a implementação deste jogo em Prolog, usando restrições seria uma mais valia para vencer o prémio que era na altura oferecido. A pouca informação encontrada sobre este jogo de tabuleiro também despertou curiosidade.
  \dots
 \end{Introdu\c{c}\~{a}o}
 %
 
 \section{Descri\c{c}\~{a}o}
 %
-O
+O jogo Hoo-Doo foi criado pela empresa(?) Tryne Games, lançado na década de 50. Hoo-Doo é um jogo de tabuleiro, para um único jogador, normalmente quadrado e que tem pelo menos tantas cores quanto o número de colunas no tabuleiro, e o numero de pegs(peg é a designação de uma peça no jogo Hoo-Doo) de cada cor também é o numero de colunas do tabuleiro. Os tamanhos de tabuleiro mais frequentes são os de 4x4, 6x6 e 8x8. O jogo tem como início um tabuleiro vazio, e o objectivo é preencher todas as posições do tabuleiro com as pegs disponíveis, sem nunca repetir peças da mesma cor quer na mesma linha, coluna, ou qualquer uma das diagonais. Para auxiliar na resolução do tabuleiro, existem as denominadas pegs transparentes, cuja sua característica é preencher uma posição sem lhe atribuir uma cor. O uso de pegs transparentes é absolutamente necessário para a resolução de tabuleiros com determinados tamanhos, cuja resolução é possível apenas com o uso de pegs transparentes(como exemplo temos um tabuleiro de 6x6, que é impossível resolver mesmo com duas pegs transparentes). Será sempre considerada a melhor resolução, aquela que usar menos pegs transparentes, sendo portanto esse, o parâmetro de optimização.
 
 \end{Descri\c{c}\~{a}o}
 
