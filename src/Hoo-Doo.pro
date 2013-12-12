@@ -9,25 +9,47 @@
 :-include('tabPrint.pro').
 
 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Input validation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+checkValidSize(NLines, NColumns, Status):-
+        NLines < 0,
+        NLines > 25,
+        NColumns < 0,
+        NColumns > 25,
+        Status=bad.
+
+checkValidSize(_, _, ok).
+
+
 executeMenuCommand('1',ok).
 executeMenuCommand('4',ok):-halt.
 executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
 
 
 menu:-
-        write('1- Choose Size of the board\n'),
+        write('1- Choose board sizes\n'),
         write('2- Exit\n').
 
 
+getSize(NLines, NColumns):-
+        write('Write the number of lines you want followed by "."'), nl,
+        read(NLines), nl,
+        write('Write the number of columns you want followed by "."'), nl,
+        read(NColumns).
 
-checkValidSize(Size, Ok):-
-        Size < 0,
-        Size > 25, Ok=bad.
-checkValidSize(Size, ok).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-getSize(Size):-
-        write('Insert the size of the board you wish to play followed by "."'), nl,
-        read(Size), nl.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Game Start
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 
 start:-
@@ -37,20 +59,25 @@ start:-
         get_char(_), %consume enter key
         executeMenuCommand(Input,Output),
         Output=ok,
-        getSize(Size),
-        checkValidSize(Size, Is_ok),
+        getSize(NLines, NColumns),
+        checkValidSize(NLines, NColumns, Is_ok),
         Is_ok= ok,
         solve(SolveBoard, Size, 0),
-        print_tab(SolveBoard).
+        print_tab(SolveBoard), !;
+        write('You chose an invalid size\n\n\n'),
+        start.
 
 
 
 solve(SolvedBoard,Side,Transparent):-
-        DesiredSize is Side*Side,
+        DesiredSize is Side*Side, %linhas*colunas
         generateFlatList(Board,DesiredSize),
         applyConstraints(Board,Side,Transparent),
         labeling([], Board),
         SolvedBoard=Board.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
         

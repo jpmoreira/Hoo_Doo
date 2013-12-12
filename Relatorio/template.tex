@@ -1,3 +1,4 @@
+% !TeX spellcheck = pt_BR
 \documentclass{llncs}
 \usepackage{llncsdoc}
 %
@@ -13,17 +14,28 @@
 \maketitle
 %
 \begin{abstract}
-Este projecto consiste na implementação de um \textit{solver} para o jogo de tabuleiro \textit{Hoo-Doo}. O solver funciona para uma dimensão arbitrária do tabuleiro. A implementação foi feita usando Prolog, mas concretamente a plataforma \emph{Sicstus Prolog}  tendo sido usados para tal os módulos desta mesma ferramente para Pragramação em Lógica com Restrições sobre domínios finitos.
+Este projecto consiste na implementação de um \textit{solver} para o jogo de tabuleiro \textit{Hoo-Doo}. O solver funciona para uma dimensão arbitrária do tabuleiro. A implementação foi feita usando Prolog, mas concretamente a plataforma \emph{Sicstus Prolog}  tendo sido usados para tal os módulos desta mesma ferramenta para Pragramação em Lógica com Restrições sobre domínios finitos.
 \end{abstract}
 %
 \section{Introdu\c{c}\~{a}o}
 %
-With this chapter, the preliminaries are over, and we begin the
-search for periodic solutions \dots
+A realização deste trabalho teve como um dos objectivos, perceber a importância e utilidade da Programa em Lógica com restrições. Outro dos objectivos foi o uso e conhecimento de bibliotecas do SICStus, que auxiliam na resolução dos problemas existentes e o alcance dos seus predicados, que, por vezes, mesmo não estando directamente relacionados com um problema em concreto, sendo interpretados de formas alternativas se tornam bastante úteis, quer na simplificação do problema, quer na procura da sua resolução.
+O Hoo-Doo, dependendo da sua dimensão, pode ter várias, uma ou até nenhuma resolução se não forem usadas pegs transparentes(peg é uma peça de cor, será explicado em detalhe na descrição do jogo). Quando foi lançado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ à primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a pegs transparentes, e, os elementos do grupo acharam que seria interessante e até certo ponto divertido verificar como a implementação deste jogo em Prolog, usando restrições seria uma mais valia para vencer o prémio que era na altura oferecido.
+ \dots
+\end{Introdu\c{c}\~{a}o}
 %
+
+\section{Descri\c{c}\~{a}o}
+%
+O
+
+\end{Descri\c{c}\~{a}o}
+
+
+
 \section{Visualiza\c{c}\~{a}o}
 %
-Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primerio predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas. Este predicado calcula o comprimento da lista, que determina o número de linhas, colunas e respectivos índices a serem imprimidos, e de seguida passa-os como argumentos  para as funções auxiliares que controlam a impressão, descritas em baixo.
+Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primeiro predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas. Este predicado calcula o comprimento da lista, que determina o número de linhas, colunas e respectivos índices a serem imprimidos, e de seguida passa-os como argumentos  para as funções auxiliares que controlam a impressão, descritas em baixo.
 
 \begin{itemize}
 \item \textit{print\_tab\_aux(+Board,?LineI,?ColumnI)}: coordena a utilização dos seguintes predicados para a construção visual do tabuleiro.
@@ -32,6 +44,11 @@ Existem seis predicados utilizados para a construção visual do tabuleiro em mo
 \item \textit{print\_empty\_line(+Length)}: imprime uma linha horizontal.
 \item \textit{print\_column\_index(+ASCIICode,+Index)}: imprime o índice das colunas.
 \end{itemize}
+
+\end{Visualiza\c{c}\~{a}o}
+
+
+
 
 \subsection{Autonomous Systems}
 %
