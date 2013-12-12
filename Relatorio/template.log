@@ -1,24 +1,18 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2013.10.11)  10 DEC 2013 18:29
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.10.11)  12 DEC 2013 08:04
 entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
 **template.tex
-(C:\Users\Laptop\Documents\FEUP\PLOG\Hoo_Doo\Relatorio\template.tex
+(./template.tex
 LaTeX2e <2011/06/27>
-Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
-abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
-croatian, czech, danish, dutch, esperanto, estonian, farsi, finnish, french, ga
-lician, german, german-x-2012-05-30, greek, gujarati, hindi, hungarian, iceland
-ic, indonesian, interlingua, irish, italian, kannada, kurmanji, latin, latvian,
- lithuanian, malayalam, marathi, mongolian, mongolianlmc, monogreek, ngerman, n
-german-x-2012-05-30, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
-ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
-an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
-ishmax, welsh, loaded.
-(C:\Users\Laptop\Documents\FEUP\PLOG\Hoo_Doo\Relatorio\llncs.cls
+Babel <3.9f> and hyphenation patterns for 78 languages loaded.
+(./llncs.cls
 Document Class: llncs 2013/09/27 v2.18 
  LaTeX document class for Lecture Notes in Computer Science
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\article.cls"
+(/usr/local/texlive/2013/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\size10.clo"
+(/usr/local/texlive/2013/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -33,7 +27,7 @@ File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\tools\multicol.sty"
+(/usr/local/texlive/2013/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
 \c@tracingmulticols=\count87
 \mult@box=\box26
@@ -81,10 +75,10 @@ Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
 \colbreak@box=\box51
 \multicol@sort@counter=\count95
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\aliascnt.sty"
+(/usr/local/texlive/2013/texmf-dist/tex/latex/oberdiek/aliascnt.sty
 Package: aliascnt 2009/09/08 v1.3 Alias counters (HO)
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\carlisle\remreset.sty"))
+(/usr/local/texlive/2013/texmf-dist/tex/latex/carlisle/remreset.sty))
 \c@chapter=\count96
 LaTeX Font Info:    Redeclaring math symbol \Gamma on input line 362.
 LaTeX Font Info:    Redeclaring math symbol \Delta on input line 363.
@@ -136,24 +130,25 @@ LaTeX Font Info:    Redeclaring math symbol \Omega on input line 372.
 \c@remark=\count115
 \headlineindent=\dimen123
 )
-(C:\Users\Laptop\Documents\FEUP\PLOG\Hoo_Doo\Relatorio\llncsdoc.sty)
-(C:\Users\Laptop\Documents\FEUP\PLOG\Hoo_Doo\Relatorio\template.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
-LaTeX Font Info:    ... okay on input line 4.
+(./llncsdoc.sty) (./template.aux)
+\openout1 = `template.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 13.
+(Font)              <7> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 13.
+(Font)              <5> on input line 14.
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no § in font cmr10!
 Missing character: There is no Ã in font cmr10!
@@ -189,6 +184,161 @@ Missing character: There is no § in font cmr10!
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no £ in font cmr10!
 Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¢ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ³ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no µ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¡ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¡ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no   in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no µ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no º in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ­ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no µ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ­ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ­ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¡ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ­ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no © in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ­ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¡ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no ¢ in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+ [1
+
+{/usr/local/texlive/2013/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no § in font cmr10!
+Missing character: There is no Ã in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Ã in font cmr10!
 Missing character: There is no © in font cmr10!
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no º in font cmr10!
@@ -215,40 +365,33 @@ Missing character: There is no £ in font cmr10!
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no © in font cmr10!
 
-Overfull \hbox (33.28162pt too wide) in paragraph at lines 31--32
+Overfull \hbox (33.28162pt too wide) in paragraph at lines 43--44
 []\OT1/cmr/m/it/10 print[]line(+Line)\OT1/cmr/m/n/10 : im-prime uma linha do ta
 b-uleiro, fazendo uso do tab[]map(+Symb)
  []
 
 Missing character: There is no Ã in font cmr10!
 Missing character: There is no ­ in font cmr10!
-[1
-
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
-(C:\Users\Laptop\Documents\FEUP\PLOG\Hoo_Doo\Relatorio\template.aux) ) 
+[2] (./template.aux) ) 
 Here is how much of TeX's memory you used:
- 641 strings out of 493921
- 7858 string characters out of 3147278
- 64123 words of memory out of 3000000
- 3994 multiletter control sequences out of 15000+200000
- 6456 words of font info for 23 fonts, out of 3000000 for 9000
- 841 hyphenation exceptions out of 8191
- 29i,5n,21p,522b,165s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Progr
-am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Program Files
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/public/amsfonts/cm/cmbx9.pfb><C:/Program Files/MiKTeX 2.9/fonts
-/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/p
-ublic/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
-fonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
-cmr7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr9.pfb><
-C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Progr
-am Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/
-MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Program Files/MiKTeX 2
-.9/fonts/type1/public/amsfonts/cm/cmti9.pfb>
-Output written on template.pdf (2 pages, 148205 bytes).
+ 637 strings out of 493315
+ 7380 string characters out of 6137903
+ 67215 words of memory out of 5000000
+ 4150 multiletter control sequences out of 15000+600000
+ 6148 words of font info for 22 fonts, out of 8000000 for 9000
+ 957 hyphenation exceptions out of 8191
+ 29i,5n,21p,1269b,148s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2013/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx12.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmbx9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmr9.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmti10.pfb></usr/local/texlive/2013/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmti9.pfb>
+Output written on template.pdf (2 pages, 84364 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
+ 35 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
