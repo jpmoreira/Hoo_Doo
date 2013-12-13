@@ -17,17 +17,21 @@
 %Input validation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 checkValidSize(NLines, NColumns, Status):-
-        NLines < 0,
-        NLines > 25,
-        NColumns < 0,
-        NColumns > 25,
-        Status=bad.
+        number(NLines),
+        number(NColumns),
+        NLines > 0,
+        NLines < 25,
+        NColumns > 0,
+        NColumns < 25,
+        Status=ok.
 
-checkValidSize(_, _, ok).
+
+
+checkValidSize(_, _, bad).
 
 
 executeMenuCommand('1',ok).
-executeMenuCommand('4',ok):-halt.
+executeMenuCommand('2',ok):-halt.
 executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
 
 
@@ -62,9 +66,9 @@ start:-
         getSize(NLines, NColumns),
         checkValidSize(NLines, NColumns, Is_ok),
         Is_ok= ok,
-        solve(SolveBoard, Size, 0),
+        solve2(SolveBoard, NLines, NColumns , 1),
         print_tab(SolveBoard), !;
-        write('You chose an invalid size\n\n\n'),
+        write('You chose an invalid option or board size\n\n\n'),
         start.
 
 
