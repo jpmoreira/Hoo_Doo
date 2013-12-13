@@ -7,20 +7,10 @@
 
 :-include('flat_2D_convert.pro').
 
-
-
-solve(SolvedBoard,Side,Transparent):-
-        DesiredSize is Side*Side,
+solve(SolvedBoard,NrLines,NrColumns,TransparentMode):-
+        DesiredSize is NrLines*NrColumns,%plus one for the Transparent
         generateFlatList(Board,DesiredSize),
-        applyConstraints(Board,Side,Transparent),
-        labeling([], Board),
-        SolvedBoard=Board.
-
-
-solve2(SolvedBoard,NrLines,NrColumns,TransparentMode):-
-        DesiredSize is NrLines*NrColumns+1,%plus one for the Transparent
-        generateFlatList(Board,DesiredSize),
-        applyConstraints2(Board,NrLines,NrColumns,TransparentMode),
+        applyConstraints(Board,NrLines,NrColumns,TransparentMode),
         labeling([], Board),
         SolvedBoard=Board.
 
@@ -45,24 +35,14 @@ generateFlatListAux(DesiredSize, Index, Progress, Board):-
 % Apply Hoo-Doo Constraints
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-applyConstraints(FlatBoard,Side,UseTransparent):-
-        
-        %apply domain constraints
-        (UseTransparent = 0,!,domain(FlatBoard,1,Side);domain(FlatBoard,0,Side)),
-        inflate(Inflated, FlatBoard,Side),
-        applyLineConstraints(Inflated),
-        applyColumnConstraints(Inflated,Side),
-        applyDiagonalConstraints(Inflated,Side).
-  
-
-applyConstraints2(FlatBoard,NrLines,NrColumns,UseTransparent):-
-        maxMember(UpperValue,[NrColumns,NrLines]),
+applyConstraints(FlatBoard,NrLines,NrColumns,UseTransparent):-
+        max_member(UpperValue,[NrColumns,NrLines]),
         %apply domain constraints
         (UseTransparent = 0,!,domain(FlatBoard,1,UpperValue);domain(FlatBoard,0,UpperValue)),
         inflate(Inflated, FlatBoard,NrLines,NrColumns),
         applyLineConstraints(Inflated),
         applyColumnConstraints(Inflated,NrColumns),
-        applyDiagonalConstraints2(Inflated,NrLines,NrColumns).
+        applyDiagonalConstraints(Inflated,NrLines,NrColumns).
 
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -75,8 +55,7 @@ applyLineConstraints([BoardHead|BoardTail]):-
         !,
         applyLineConstraints(BoardTail).
 
-applyLineConstraints([LastLine]):-
-        all_distinct(LastLine).
+applyLineConstraints([]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -129,13 +108,24 @@ getlDiagonalStartingPosition(Side,DiagonalNr,Line,Col):-
         !.
 
 
-getLDiagonal(Side,Board,Diagonal,DiagonalNr):-
-        getlDiagonalStartingPosition(Side,DiagonalNr,Line,Col),
+getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr):-
+        max_member(Max,[NrLines,NrColumns]),
+        getlDiagonalStartingPosition(Max,DiagonalNr,Line,Col),%get position for the square containing the board
         !,
-        getLDiagonal(Side,Board,Diagonal,DiagonalNr,[],Line,Col).
+        getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,[],Line,Col).
 
-getLDiagonal(Side,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
-        CurrentLine<Side,CurrentCol<Side,
+
+%case where the position is outside the board and the square containing it
+getLDiagonal(NrLines,NrColumns,_,Diagonal,_,Tmp,CurrentCol,CurrentLine):-
+        max_member(Max,[NrLines,NrColumns]),
+        (CurrentCol>=Max;CurrentLine>=Max),
+        !,
+        Diagonal=Tmp.%just return what you have so far
+
+
+
+getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
+        CurrentLine<NrLines,CurrentCol<NrColumns,
         CurrentLine>=0,CurrentCol>=0,
         NewCol is CurrentCol+1,
         NewLine is CurrentLine+1,
@@ -143,56 +133,54 @@ getLDiagonal(Side,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
         nth0(CurrentCol,Line,Elem),
         append(Tmp,[Elem],NewTmp),
         !,
-        getLDiagonal(Side,Board,Diagonal,DiagonalNr,NewTmp,NewLine,NewCol).
-getLDiagonal(Side,_,Diagonal,_,Tmp,CurrentCol,CurrentLine):-
-        (CurrentCol>=Side;CurrentLine>=Side),
+        getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,NewTmp,NewLine,NewCol).
+
+
+%case where it is outside the board but not outside the square that constains it probably 
+%because the initial point of the diagonal is in a position that is not present in this 
+%board but only on the square that contains it. Remember that getlDiagonalStartingPosition 
+%gets the position in the square that constains the board not the board itself
+%being so it may happen that the initial position is outside the board
+
+getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentCol,CurrentLine):-
+        NewCol is CurrentCol+1,
+        NewLine is CurrentLine+1,
+        %just increment position hoping it will get inside the board
         !,
-        Diagonal=Tmp.
+        getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,NewLine,NewCol).
         
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Find r Diagonal
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
         
 getrDiagonalStartingPosition(Side,DiagonalNr,Line,Col):-
         (DiagonalNr<Side,Pos=DiagonalNr;DiagonalNr>=Side,Pos is (DiagonalNr-Side+2)*Side-1),
         Line is Pos // Side,
         Col is  Pos mod Side,
         !.
-        
-getRDiagonal(Side,Board,Diagonal,DiagonalNr):-
-        getrDiagonalStartingPosition(Side,DiagonalNr,StartingLine,StartingCol),
-        getRDiagonal(Side,Board,Diagonal,DiagonalNr,[],StartingLine,StartingCol).
-
-getRDiagonal(Side,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
-        CurrentLine<Side,CurrentCol<Side,
-        CurrentLine>=0,CurrentCol>=0,
-        NewLine is CurrentLine+1,
-        NewCol is CurrentCol-1,
-        nth0(CurrentLine,Board,Line),
-        nth0(CurrentCol,Line,Elem),
-        append(Tmp,[Elem],NewTmp),
-        !,
-        getRDiagonal(Side,Board,Diagonal,DiagonalNr,NewTmp,NewLine,NewCol).
-getRDiagonal(Side,_,Diagonal,_,Tmp,CurrentLine,CurrentCol):-
-        (CurrentLine<0;CurrentCol<0;CurrentLine>=Side;CurrentCol>=Side),
-        !,
-        Diagonal=Tmp.
 
 
+%refer to getLDiagonal for comments on the implementation (they are the same for both cases)
 
-getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr):-
+%both both predicates are similar, differing only on the increment function for NewLine and NewCol
+%that defines the next position in the diagonal
+
+getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr):-
         max_member(Max, [NrLines,NrColumns]),
         getrDiagonalStartingPosition(Max,DiagonalNr,StartingLine,StartingCol),
-        getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,[],StartingLine,StartingCol).
+        getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,[],StartingLine,StartingCol).
 
-getRDiagonal2(NrLines,NrColumns,_,Diagonal,_,Tmp,CurrentLine,CurrentCol):-
+getRDiagonal(NrLines,NrColumns,_,Diagonal,_,Tmp,CurrentLine,CurrentCol):-
         max_member(Max,[NrLines,NrColumns]),
         (CurrentLine<0;CurrentCol<0;CurrentLine>=Max;CurrentCol>=Max),
         !,
         Diagonal=Tmp.
 
-getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
+getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
         CurrentLine<NrLines,CurrentCol<NrColumns,
         CurrentLine>=0,CurrentCol>=0,
         NewLine is CurrentLine+1,
@@ -201,9 +189,9 @@ getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,Curren
         nth0(CurrentCol,Line,Elem),
         append(Tmp,[Elem],NewTmp),
         !,
-        getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,NewTmp,NewLine,NewCol).
+        getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,NewTmp,NewLine,NewCol).
 
-getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
+getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,CurrentCol):-
         NewLine is CurrentLine+1,
         NewCol is CurrentCol-1,
         !,
@@ -214,31 +202,35 @@ getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,Curren
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-applyDiagonalConstraints(Board,Side):-
-        applyRDiagonalConstraints(Board,Side,1),
-        applyLDiagonalConstraints(Board,Side,1).
+applyDiagonalConstraints(Board,NrLines,NrColumns):-
+        applyRDiagonalConstraints(Board,NrLines,NrColumns,1),
+        applyLDiagonalConstraints(Board,NrLines,NrColumns,1).
 
 
-applyRDiagonalConstraints(Board,Side,DiagonalNr):-
-        DiagonalNr<2*Side-2,
+applyRDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr):-
+        max_member(Max,[NrLines,NrColumns]),
+        DiagonalNr<2*Max-2,
         NextDiagonalNr is DiagonalNr +1,
-        getRDiagonal(Side,Board,Diagonal,DiagonalNr),
+        getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr),
         all_distinct(Diagonal),
         !,
-        applyRDiagonalConstraints(Board,Side,NextDiagonalNr).
-applyRDiagonalConstraints(_,Side,DiagonalNr):-
-        DiagonalNr>=2*Side-2.
+        applyRDiagonalConstraints(Board,NrLines,NrColumns,NextDiagonalNr).
+applyRDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr):-
+        max_member(Max,[NrLines,NrColumns]),
+        DiagonalNr>=2*Max-2.
 
 
-applyLDiagonalConstraints(Board,Side,DiagonalNr):-
-        DiagonalNr<2*Side-2,
+applyLDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr):-
+        max_member(Max,[NrLines,NrColumns]),
+        DiagonalNr<2*Max-2,
         NextDiagonalNr is DiagonalNr +1,
-        getLDiagonal(Side,Board,Diagonal,DiagonalNr),
+        getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr),
         all_distinct(Diagonal),
         !,
-        applyRDiagonalConstraints(Board,Side,NextDiagonalNr).
-applyLDiagonalConstraints(_,Side,DiagonalNr):-
-        DiagonalNr>=2*Side-2.
+        applyLDiagonalConstraints(Board,NrLines,NrColumns,NextDiagonalNr).
+applyLDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr):-
+        max_member(Max,[NrLines,NrColumns]),
+        DiagonalNr>=2*Max-2.
 
 
 %       TODO non square version!!!!!!
