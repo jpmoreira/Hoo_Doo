@@ -66,7 +66,7 @@ start:-
         getSize(NLines, NColumns),
         checkValidSize(NLines, NColumns, Is_ok),
         Is_ok= ok,
-        solve2(SolveBoard, NLines, NColumns , 1),
+        solve(SolveBoard, NLines, NColumns , 1),
         print_tab(SolveBoard), !;
         write('You chose an invalid option or board size\n\n\n'),
         start.
@@ -261,7 +261,7 @@ getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,Current
         NewLine is CurrentLine+1,
         NewCol is CurrentCol-1,
         !,
-        getRDiagonal2(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,NewLine,NewCol).
+        getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,NewLine,NewCol).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Apply Diagonal Constraints
