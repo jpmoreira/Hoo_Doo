@@ -5,14 +5,13 @@
 
 
 
-tab_map(NUM, Range):- 
-        NUM =< Range,
+tab_map(NUM):- 
         write(NUM).
-tab_map(_, _):- write('0').
+%tab_map(_):- write('0').
 
 
 print_line([X|[]]):- 
-  X < 10,
+        X < 10,
     write('|  '),
     tab_map(X),
     write(' |').

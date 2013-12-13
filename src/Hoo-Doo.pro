@@ -16,10 +16,11 @@ test(Bi):-
         applyConstraints(Board,5,5,1),
         sum(Board,#=,Soma),
         append(Board,[Soma],TodasAsVars),
-        labeling([maximize(Soma),time_out(on_exception(Q,(repeat,false),true),2,Board)],TodasAsVars),
+        labeling([maximize(Soma),time_out(5000, Flag)],TodasAsVars),
         inflate(Bi,Board,5,5),
         nl,
-        print_tab(Bi),
+        print_tab(Bi), nl,
+        write(Flag),
         nl.
 
 
@@ -39,7 +40,6 @@ checkValidSize(NLines, NColumns, Status):-
         NColumns < 25,
         Status=ok.
 
-checkValidSize(_, _, bad).
 
 
 
@@ -60,9 +60,9 @@ getSize(NLines, NColumns):-
         read(NColumns).
 
 
-isValidTransparency(0, ok).
-isValidTransparency(1, ok).
-isValidTransparency(2, ok):-!, halt.
+isValidTransparency('0', ok).
+isValidTransparency('1', ok).
+isValidTransparency('2', ok):-!, halt.
 isValidTransparency(_, bad).
 
 getTransparency(Transparency):-
@@ -71,8 +71,7 @@ getTransparency(Transparency):-
         get_char(Transparency),
         get_char(_),
         isValidTransparency(Transparency, Is_ok),
-        !,
-        Is_ok = ok;
+        !,Is_ok = ok;
         !,
         write('Invalid Option, try again\n'),
         getTransparency(Transparency).
