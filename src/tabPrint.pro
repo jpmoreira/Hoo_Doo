@@ -4,9 +4,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 
-tab_map(x):- write(' ').
-tab_map(NUM):- write(NUM).
 
+tab_map(NUM, Range):- 
+        NUM =< Range,
+        write(NUM).
+tab_map(_, _):- write('0').
 
 
 print_line([X|[]]):- 

@@ -27,6 +27,9 @@ test(Bi):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Input validation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+checkValidSize(0, _, _):-!, halt.
+checkValidSize(_, 0, _):-!, halt.
 checkValidSize(NLines, NColumns, Status):-
         number(NLines),
         number(NColumns),
@@ -36,13 +39,12 @@ checkValidSize(NLines, NColumns, Status):-
         NColumns < 25,
         Status=ok.
 
-
-
 checkValidSize(_, _, bad).
 
 
+
 executeMenuCommand('1',ok).
-executeMenuCommand('2',ok):-halt.
+executeMenuCommand('2',ok):-!, halt.
 executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
 
 
@@ -52,10 +54,30 @@ menu:-
 
 
 getSize(NLines, NColumns):-
-        write('Write the number of lines you want followed by "."'), nl,
+        write('Write the number of lines you want followed by ".",\nWrite 0 to exit'), nl,
         read(NLines), nl,
-        write('Write the number of columns you want followed by "."'), nl,
+        write('Write the number of columns you want followed by "."\nWrite 0 to exit'), nl,
         read(NColumns).
+
+
+isValidTransparency(0, ok).
+isValidTransparency(1, ok).
+isValidTransparency(2, ok):-!, halt.
+isValidTransparency(_, bad).
+
+getTransparency(Transparency):-
+        write('Do you wish to solve with transparent pegs?\n'),
+        write('0- No Transparent pegs\n1-With transparent pegs\n2-Exit\n'),
+        get_char(Transparency),
+        get_char(_),
+        isValidTransparency(Transparency, Is_ok),
+        !,
+        Is_ok = ok;
+        !,
+        write('Invalid Option, try again\n'),
+        getTransparency(Transparency).
+        
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -77,9 +99,11 @@ start:-
         getSize(NLines, NColumns),
         checkValidSize(NLines, NColumns, Is_ok),
         Is_ok= ok,
-        solve(SolveBoard, NLines, NColumns , 1),
-        print_tab(SolveBoard), !;
-        write('You chose an invalid option or board size\n\n\n'),
+        getTransparency(Transparency),
+        solve(SolveBoard, NLines, NColumns , Transparency),
+        (print_tab(SolveBoard);
+        write('You chose an invalid option or board size\n\n\n')),
+        !,
         start.
 
 
