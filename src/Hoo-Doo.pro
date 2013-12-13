@@ -6,6 +6,71 @@
 %%%%%4X4 [[1,a,c,v],[,e,3,4,5],[,a,s,d,y],[l,k,j,h]]
 
 :-include('flat_2D_convert.pro').
+:-include('tabPrint.pro').
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Input validation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+checkValidSize(NLines, NColumns, Status):-
+        number(NLines),
+        number(NColumns),
+        NLines > 0,
+        NLines < 25,
+        NColumns > 0,
+        NColumns < 25,
+        Status=ok.
+
+
+
+checkValidSize(_, _, bad).
+
+
+executeMenuCommand('1',ok).
+executeMenuCommand('2',ok):-halt.
+executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
+
+
+menu:-
+        write('1- Choose board sizes\n'),
+        write('2- Exit\n').
+
+
+getSize(NLines, NColumns):-
+        write('Write the number of lines you want followed by "."'), nl,
+        read(NLines), nl,
+        write('Write the number of columns you want followed by "."'), nl,
+        read(NColumns).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Game Start
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+start:-
+        write('############Hoo-Doo##########\n'), nl,
+        menu, 
+        get_char(Input),
+        get_char(_), %consume enter key
+        executeMenuCommand(Input,Output),
+        Output=ok,
+        getSize(NLines, NColumns),
+        checkValidSize(NLines, NColumns, Is_ok),
+        Is_ok= ok,
+        solve2(SolveBoard, NLines, NColumns , 1),
+        print_tab(SolveBoard), !;
+        write('You chose an invalid option or board size\n\n\n'),
+        start.
+
 
 solve(SolvedBoard,NrLines,NrColumns,TransparentMode):-
         DesiredSize is NrLines*NrColumns,%plus one for the Transparent
@@ -13,6 +78,7 @@ solve(SolvedBoard,NrLines,NrColumns,TransparentMode):-
         applyConstraints(Board,NrLines,NrColumns,TransparentMode),
         labeling([], Board),
         SolvedBoard=Board.
+
 
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

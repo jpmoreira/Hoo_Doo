@@ -1,3 +1,9 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Print Solution Board
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+
 tab_map(x):- write(' ').
 tab_map(NUM):- write(NUM).
 
@@ -34,15 +40,16 @@ print_line([X|Xs]):-
 
 
 
-print_empty_line(0):-
-        write('-----').
+
 
 print_empty_line(Len):-
-      Len > 0,
-      write('----'),
+      Len > 1,
+      write('-----'),
       LenNext is Len - 1,
       print_empty_line(LenNext).
 
+print_empty_line(1). %:-
+      %  write('-----').
 
 
 
@@ -60,7 +67,7 @@ print_column_index(ASCIICode,I):-
 
 
 print_tab_aux([X|[]], 1, Ci):-
-  write('   '),
+  write('    '),
   print_empty_line(Ci), nl,
   write(' '), write(1), write(' '),
   print_line(X), nl,
@@ -77,7 +84,7 @@ print_tab_aux([X|[]], 1, Ci):-
 print_tab_aux([X|Xs], Li, Ci):-
       Li > 9,
 
-      write('   '),
+      write('    '),
       print_empty_line(Ci), nl,
 
 
