@@ -2,7 +2,8 @@
 \documentclass{llncs}
 \usepackage{llncsdoc}
 \usepackage{graphicx}
-%
+\usepackage{indentfirst}
+\usepackage{subfig}
 \begin{document}
 
 
@@ -19,11 +20,15 @@ Este projecto consiste na implementa\c{c}\~{a}o de um \textit{solver} para o jog
 \end{abstract}
 %
 \section{Introdu\c{c}\~{a}o}
-%
-A realiza\c{c}\~{a}o deste trabalho teve como objectivos, perceber a import\^{a}ncia , pot\^{e}ncialidades e utilidade da Programa\c{c}\~{a}o em L\'{o}gica com restri\c{c}\~{o}es. Outro dos objectivos foi o uso e conhecimento de bibliotecas do SICStus, que auxiliam na resolu\c{c}\~{a}o dos problemas existentes e o alcance dos seus predicados, que, por vezes, mesmo n\~{a}o estando directamente relacionados com um problema em concreto, sendo interpretados de formas alternativas tornam-se bastante \'{u}teis, quer na simplifica\c{c}\~{a}o do problema, quer na procura de uma resolu\c{c}\~{a}o mais eficiente.
-O Hoo-Doo, dependendo da sua dimens\~{a}o, pode ter v\'{a}rias, uma ou at\'{e} nenhuma resolu\c{c}\~{a}o se n\~{a}o forem usadas \emph{pegs} transparentes(peg \'{e} uma pe\c{c}a de cor, ser\'{a} explicado em detalhe na descri\c{c}\~{a}o do jogo). Quando foi lan\c{c}ado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ \`{a} primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a \emph{pegs} transparentes, e, os elementos do grupo acharam que seria interessante e at\'{e} certo ponto divertido verificar como a implementa\c{c}\~{a}o deste jogo em Prolog, usando restri\c{c}\~{o}es seria uma mais valia para vencer o pr\'{e}mio que era na altura oferecido. A pouca informa\c{c}\~{a}o encontrada sobre este jogo de tabuleiro tamb\'{e}m despertou curiosidade.
- O trabalho desenvolvido pelos elementos do grupo tem tr\^{e}s partes distintas:
- \begin{itemize}
+\paragraph*{}
+O Hoo-Doo é um jogo de tabuleiro criado nos anos 50 e que deriva do popular N Queens. Dependendo da sua dimens\~{a}o, pode ter v\'{a}rias, uma ou at\'{e} nenhuma resolu\c{c}\~{a}o se n\~{a}o forem usadas \emph{pegs} transparentes(peg \'{e} uma pe\c{c}a de cor, ser\'{a} explicado em detalhe na descri\c{c}\~{a}o do jogo). Quando foi lan\c{c}ado o jogo de tabuleiro Hoo-doo, os seus criadores ofereciam 1000\$ \`{a} primeira pessoa que conseguisse resolver um tabuleiro de 8x8 sem recurso a \emph{pegs} transparentes, e, os elementos deste grupo acharam que seria interessante e at\'{e} certo ponto divertido verificar como a implementa\c{c}\~{a}o deste jogo em Prolog, usando restri\c{c}\~{o}es seria uma mais valia para vencer o pr\'{e}mio que era na altura oferecido. Apesar das poucas regras do jogo, a resolução dos puzzles pode ser penosa. Num tabuleiro de oito posições encontram-se 1.817.1052 combinações possíveis, e nem sempre, noutros tamanhos há solução possível.
+\paragraph*{}
+Apesar de ter sido realizada uma pesquisa sobre outras implementações deste jogo de tabuleiro, nenhuma foi encontrada. A informação sobre o jogo e soluções também é praticamente inexistente, pelo que não nos foi possível comparar a nossa abordagem com outras realizadas. Na nossa implementação, o problema é resolvido com a aplicação de restrições a linhas, colunas e ambas as diagonais possíveis para cada posição do tabuleiro .
+\paragraph*{}
+Para testar o programa criado, deve ser chamado o predicado start. Na implementação realizada do jogo, também temos a possibilidade de procurar soluções para tabuleiros rectângulos, situação não prevista no jogo original.
+ 
+O trabalho desenvolvido pelos elementos do grupo tem tr\^{e}s partes distintas:
+\begin{itemize}
 \item Parte de visualiza\c{c}\~{a}o do jogo, em muito semelhante ao j\'{a} desenvolvido num outro trabalho para a disciplina;
 \item Parte do \emph{solver}, que resolve o tabuleiro que lhe \'{e} passado;
 \item Parte de convers\~{a}o de tabuleiro \emph{flat} para tabuleiro bi-dimensional e vice-versa.
@@ -35,9 +40,26 @@ Na implementa\c{c}\~{a}o do jogo \'{e} suportado o funcionamento em dois modos, 
 
 \section{Descri\c{c}\~{a}o}
 %
-O jogo Hoo-Doo foi criado pela empresa Tryne Games, lan\c{c}ado na d\'{e}cada de 50. Hoo-Doo \'{e} um jogo de tabuleiro, para um \'{u}nico jogador, normalmente quadrado e que tem pelo menos tantas cores quanto o n\'{u}mero de colunas no tabuleiro, e o numero de \emph{\emph{pegs}} de cada cor tamb\'{e}m \'{e} o numero de colunas do tabuleiro. Os tamanhos de tabuleiro mais frequentes s\~{a}o os de 4x4, 6x6 e 8x8. O jogo tem como in\'{i}cio um tabuleiro vazio, e o objectivo \'{e} preencher todas as posi\c{c}\~{o}es do tabuleiro com as \emph{pegs} dispon\'{i}veis, sem nunca repetir pe\c{c}as da mesma cor na mesma linha, coluna, ou qualquer uma das diagonais. Para auxiliar na resolu\c{c}\~{a}o do tabuleiro, existem as denominadas \emph{pegs} transparentes, cuja caracter\'{i}stica \'{e} preencher uma posi\c{c}\~{a}o sem lhe atribuir uma cor. O uso de \emph{pegs} transparentes \'{e} absolutamente necess\'{a}rio para a resolu\c{c}\~{a}o de tabuleiros com determinados tamanhos, cuja resolu\c{c}\~{a}o \'{e} poss\'{i}vel apenas com o uso de \emph{pegs} transparentes(como exemplo temos um tabuleiro de 6x6, que \'{e} imposs\'{i}vel resolver mesmo com duas \emph{pegs} transparentes). \'{E} sempre considerada como a melhor resolu\c{c}\~{a}o, aquela que usar menos \emph{pegs} transparentes.
+\paragraph*{}
+O jogo Hoo-Doo foi criado pela empresa Tryne Sales Inc., New York City, lan\c{c}ado na d\'{e}cada de 50. Hoo-Doo \'{e} um jogo de tabuleiro, para um \'{u}nico jogador, normalmente quadrado e que tem pelo menos tantas cores quanto o n\'{u}mero de colunas no tabuleiro, e o numero de \emph{\emph{pegs}} de cada cor  é tamb\'{e}m o número de colunas do tabuleiro. Os tamanhos de tabuleiro mais frequentes s\~{a}o os de 4x4, 6x6 e 8x8.
+\paragraph*{}O jogo tem como in\'{i}cio um tabuleiro vazio, e o objectivo \'{e} preencher todas as posi\c{c}\~{o}es do tabuleiro com as \emph{pegs} dispon\'{i}veis, sem nunca repetir pe\c{c}as da mesma cor na mesma linha, coluna, ou qualquer uma das diagonais. Para auxiliar na resolu\c{c}\~{a}o do tabuleiro, existem as denominadas \emph{pegs} transparentes, cuja caracter\'{i}stica \'{e} preencher uma posi\c{c}\~{a}o sem lhe atribuir uma cor.
+\paragraph*{} 
+O uso de \emph{pegs} transparentes \'{e} absolutamente necess\'{a}rio para a resolu\c{c}\~{a}o de tabuleiros com determinados tamanhos, cuja resolu\c{c}\~{a}o \'{e} poss\'{i}vel apenas com o uso de \emph{pegs} transparentes(como exemplo temos um tabuleiro de 6x6, que \'{e} imposs\'{i}vel resolver mesmo com duas \emph{pegs} transparentes). \'{E} sempre considerada como a melhor resolu\c{c}\~{a}o, aquela que usar menos \emph{pegs} transparentes. O nível de dificuldade deste jogo de tabuleiro é considerável, e os próprios criadores no manual de instruções, escreveram na primeira linha \textit{“HOO-DOO is the puzzle game guaranteed not only to stump the experts but also to drive you personally and pleasantly nuts.”} (HOO-DOO é um jogo de tabuleiro que garante não só desafiar os peritos, mas também levá-los à loucura).
 
 
+
+\begin{figure}[h!]
+\centering
+\subfloat[Capa original]{
+    \includegraphics[width=5cm]{hoodoo2.jpg}
+    \label{fig:capa original}
+}
+\quad\quad\quad
+\subfloat[Regras]{
+    \includegraphics[width=5cm]{regras.jpg}
+    \label{fig:regras}
+}
+\end{figure}
 
 \section{Vari\'{a}veis de Decis\~{a}o}
 
@@ -65,24 +87,26 @@ A implementa\c{c}\~{a}o das restri\c{c}\~{o}es r\'{i}gidas \'{e} feita agrupando
 A implementa\c{c}\~{a}o da restri\c{c}\~{a}o flex\'{i}vel, \'{e} feita pela introdu\c{c}\~{a}o de uma vari\'{a}vel antes do \emph{labeling}, a qual se passa ao predicado \emph{sum} para que represente a soma do valor de todas as vari\'{a}veis do tabuleiro. Ap\'{o}s a aplica\c{c}\~{a}o desta restri\c{c}\~{a}o o \emph{labeling} \'{e} chamado dentro do \emph{min}, permitindo assim obter a solu\c{c}\~{a}o cuja soma dos valores das pe\c{c}as \'{e} maior, valor esse que necess\'{a}riamente inclui o menor n\'{u}mero poss\'{i}vel de pe\c{c}as transparente (pe\c{c}as com o valor zero).
 
 \section{Estrat\'{e}gia de Pesquisa}
-
+%
 A estrat\'{e}gia utilizada para a etiquetagem das vari\'{a}veis foi tentar atribuir valores primeiro, \'{a}quelas que est\~{a}o mais restritas por forma a tenta minimizar a \'{a}rvore de pesquisa, "cortando" n\'{o}s o mais cedo poss\'{i}vel. Isto \'{e} conseguido usando a op\c{c}\~{a}o \emph{ffc} que tenta atribuir valores primeiro \'{a}s vari\'{a}veis com um dom\'{i}nio menor, sendo que o crit\'{e}rio de desempate seleciona a vari\'{a}vel com mais restri\c{c}\~{o}es suspensas.
+
 
 \section{Visualiza\c{c}\~{a}o}
 
-
-
-Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primeiro predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas de inteiros. Este predicado calcula o comprimento da lista, e das sub-listas. Obtidos os números de linhas e colunas do tabuleiro em questão, procede-se à impressão, que, enquanto a cauda da lista não for vazia, isto é, ainda existirem mais linhas, segue-se um procedimento básico, que consiste em imprimir primeiro uma linha horizontal, numa nova linha verificar o tamanho do índice, para calcular o número de caracteres vazios a escrever entre o índice e início do tabuleiro(este processo de escalonamento do espaço para alinha a impressão também é usado para os valores das pegs no interior do tabuleiro), e só de seguida é impressa a linha de valores, que é a primeira lista. Este ciclo repe-te até chegar então à situação onde a cauda da lista é vazia. Nesta situação, a primeira parte do processo mantém-se(impressão da linha horizontal, impressão dos valores com o respectivo alinhamento), mas após a impressão dos valores da lista, é de imediato impressa outra linha horizontal e seguida do índice das colunas com valores Alfa-numéricos. 
+Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primeiro predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas de inteiros. Este predicado calcula o comprimento da lista, e das sub-listas. Obtidos os números de linhas e colunas do tabuleiro em questão, procede-se à impressão. Enquanto a cauda da lista não for vazia, isto é, ainda existirem mais linhas, segue-se um procedimento básico, que consiste em imprimir primeiro uma linha horizontal, numa nova linha verificar o tamanho do índice, para calcular o número de caracteres vazios a escrever entre o índice e início do tabuleiro(este processo de escalonamento do espaço para alinha a impressão também é usado para os valores das pegs no interior do tabuleiro), e só de seguida é impressa a linha de valores, que é a primeira lista. Este ciclo repete-se até chegar então à situação onde a cauda da lista é vazia. 
+\paragraph*{}
+Quando a cauda da lista é vazia, a primeira parte do processo mantém-se(impressão da linha horizontal, e também dos valores com o respectivo alinhamento), mas após a impressão dos valores da lista, é de imediato impressa outra linha horizontal e seguida do índice das colunas com valores Alfa-numéricos. 
 Vemos em baixo um exemplo de tabuleiro impresso na consola:
-\subsection*{imagem}
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=80mm]{tabuleiro.png}
-\caption{Representação da resolução de um tabuleiro  8x8}
-\label{representação do estado final de um tabuleiro 8x8}
+\paragraph*{}
+
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.6]{tabuleiro.png}
+\caption{\textit{Tabuleiro 8x8 resolvido}}
+\label{fig:jogo_original}
+\end{center}
 \end{figure}
-
-
 
 
 
