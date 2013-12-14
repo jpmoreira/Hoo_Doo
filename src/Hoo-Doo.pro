@@ -9,6 +9,7 @@
 :-include('tabPrint.pro').
 :-include('custom_all_distinct.pro').
 :-use_module(library(timeout)).
+:-use_module(library(clpfd)).
 
 
 test(Bi):-
@@ -45,7 +46,7 @@ checkValidSize(NLines, NColumns, Status):-
 
 executeMenuCommand('1',ok).
 executeMenuCommand('2',ok):-!, halt.
-executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
+executeMenuCommand(Input,Output):- !,Input\=2,Input\=1,Output=bad.
 
 
 menu:-
@@ -57,21 +58,22 @@ getSize(NLines, NColumns):-
         write('Write the number of lines you want followed by ".",\nWrite 0 to exit'), nl,
         read(NLines), nl,
         write('Write the number of columns you want followed by "."\nWrite 0 to exit'), nl,
-        read(NColumns).
+        read(NColumns), nl.
 
 
-isValidTransparency('0', ok).
-isValidTransparency('1', ok).
-isValidTransparency('2', ok):-!, halt.
+isValidTransparency('0', 0).
+isValidTransparency('1', 1).
+isValidTransparency('2', _):-!, halt.
 isValidTransparency(_, bad).
 
 getTransparency(Transparency):-
         write('Do you wish to solve with transparent pegs?\n'),
         write('0- No Transparent pegs\n1-With transparent pegs\n2-Exit\n'),
-        get_char(Transparency),
         get_char(_),
-        isValidTransparency(Transparency, Is_ok),
-        !,Is_ok = ok;
+        get_char(Option),
+        get_char(_),
+        isValidTransparency(Option, Transparency),
+        Option \=bad;
         !,
         write('Invalid Option, try again\n'),
         getTransparency(Transparency).
@@ -90,18 +92,20 @@ getTransparency(Transparency):-
 
 start:-
         write('############Hoo-Doo##########\n'), nl,
-        menu, 
+        menu, !,
         get_char(Input),
         get_char(_), %consume enter key
         executeMenuCommand(Input,Output),
         Output=ok,
         getSize(NLines, NColumns),
+        !,
         checkValidSize(NLines, NColumns, Is_ok),
         Is_ok= ok,
         getTransparency(Transparency),
-        solve(SolveBoard, NLines, NColumns , Transparency),
-        (print_tab(SolveBoard);
-        write('You chose an invalid option or board size\n\n\n')),
+        Transparency \= bad,
+        solve(SolveBoard, NLines, NColumns , Transparency), !,
+        print_tab(SolveBoard);
+        write('You chose an invalid option or board size\n\n\n'),
         !,
         start.
 
@@ -111,7 +115,7 @@ solve(SolvedBoard,NrLines,NrColumns,TransparentMode):-
         generateFlatList(Board,DesiredSize),
         applyConstraints(Board,NrLines,NrColumns,TransparentMode),
         labeling([], Board),
-        SolvedBoard=Board.
+        inflate(SolvedBoard, Board, NrLines, NrColumns).
 
 
         
