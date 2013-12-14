@@ -12,12 +12,14 @@
 
 
 test(Bi):-
-        generateFlatList(Board,25),
-        applyConstraints(Board,5,5,1),
-        sum(Board,#=,Soma),
+        generateFlatList(Board,64),
+        applyConstraints(Board,8,8,1),
+        %sum(Board,#=,Soma),
+        count(0,Board,#=,Soma),
         append(Board,[Soma],TodasAsVars),
-        labeling([maximize(Soma),time_out(5000, Flag)],TodasAsVars),
-        inflate(Bi,Board,5,5),
+        labeling([minimize(Soma),down,time_out(400000,Flag)],TodasAsVars),
+        fd_statistics,
+        inflate(Bi,Board,8,8),
         nl,
         print_tab(Bi), nl,
         write(Flag),
