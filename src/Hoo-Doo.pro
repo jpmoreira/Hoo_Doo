@@ -18,7 +18,7 @@ test(Bi):-
         %sum(Board,#=,Soma),
         count(0,Board,#=,Soma),
         append(Board,[Soma],TodasAsVars),
-        labeling([minimize(Soma),down,time_out(800000,Flag)],TodasAsVars),
+        labeling([minimize(Soma),down,time_out(100000,Flag)],TodasAsVars),
         fd_statistics,
         inflate(Bi,Board,8,8),
         nl,
