@@ -72,7 +72,10 @@ A estrat\'{e}gia utilizada para a etiquetagem das vari\'{a}veis foi tentar atrib
 
 \section{Visualiza\c{c}\~{a}o}
 %
-Existem seis predicados utilizados para a constru\c{c}\~{a}o visual do tabuleiro em modo de texto. O primeiro predicado a ser executado \'{e} o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas. Este predicado calcula o comprimento da lista, que determina o n\'{u}mero de linhas, colunas e respectivos \'{i}ndices a serem imprimidos, e de seguida passa-os como argumentos  para as fun\c{c}\~{o}es auxiliares que controlam a impress\~{a}o, descritas em baixo.
+Existem seis predicados utilizados para a construção visual do tabuleiro em modo de texto. O primeiro predicado a ser executado é o \textit{print\_tab(+board)} que recebe como argumento um tabuleiro representado por uma lista de listas de inteiros. Este predicado calcula o comprimento da lista, e das sub-listas. Obtidos os números de linhas e colunas do tabuleiro em questão, procede-se à impressão, que, enquanto a cauda da lista não for vazia, isto é, ainda existirem mais linhas, segue-se um procedimento básico, que consiste em imprimir primeiro uma linha horizontal, numa nova linha verificar o tamanho do índice, para calcular o número de caracteres vazios a escrever entre o índice e início do tabuleiro(este processo de escalonamento do espaço para alinha a impressão também é usado para os valores das pegs no interior do tabuleiro), e só de seguida é impressa a linha de valores, que é a primeira lista. Este ciclo repe-te até chegar então à situação onde a cauda da lista é vazia. Nesta situação, a primeira parte do processo mantém-se(impressão da linha horizontal, impressão dos valores com o respectivo alinhamento), mas após a impressão dos valores da lista, é de imediato impressa outra linha horizontal e seguida do índice das colunas com valores Alfa-numéricos. 
+Vemos em baixo um exemplo de tabuleiro impresso na consola:
+
+
 
 \begin{itemize}
 \item \textit{print\_tab\_aux(+Board,?LineI,?ColumnI)}: coordena a utiliza\c{c}\~{a}o dos seguintes predicados para a constru\c{c}\~{a}o visual do tabuleiro.
