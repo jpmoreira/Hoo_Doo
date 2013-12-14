@@ -7,15 +7,30 @@
 
 :-include('flat_2D_convert.pro').
 :-include('tabPrint.pro').
+:-include('custom_all_distinct.pro').
+:-use_module(library(timeout)).
 
 
-
+test(Bi):-
+        generateFlatList(Board,25),
+        applyConstraints(Board,5,5,1),
+        sum(Board,#=,Soma),
+        append(Board,[Soma],TodasAsVars),
+        labeling([maximize(Soma),time_out(5000, Flag)],TodasAsVars),
+        inflate(Bi,Board,5,5),
+        nl,
+        print_tab(Bi), nl,
+        write(Flag),
+        nl.
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Input validation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+checkValidSize(0, _, _):-!, halt.
+checkValidSize(_, 0, _):-!, halt.
 checkValidSize(NLines, NColumns, Status):-
         number(NLines),
         number(NColumns),
@@ -27,11 +42,9 @@ checkValidSize(NLines, NColumns, Status):-
 
 
 
-checkValidSize(_, _, bad).
-
 
 executeMenuCommand('1',ok).
-executeMenuCommand('2',ok):-halt.
+executeMenuCommand('2',ok):-!, halt.
 executeMenuCommand(Input,Output):-Input\=2,Input\=1,Output=bad.
 
 
@@ -41,10 +54,29 @@ menu:-
 
 
 getSize(NLines, NColumns):-
-        write('Write the number of lines you want followed by "."'), nl,
+        write('Write the number of lines you want followed by ".",\nWrite 0 to exit'), nl,
         read(NLines), nl,
-        write('Write the number of columns you want followed by "."'), nl,
+        write('Write the number of columns you want followed by "."\nWrite 0 to exit'), nl,
         read(NColumns).
+
+
+isValidTransparency('0', ok).
+isValidTransparency('1', ok).
+isValidTransparency('2', ok):-!, halt.
+isValidTransparency(_, bad).
+
+getTransparency(Transparency):-
+        write('Do you wish to solve with transparent pegs?\n'),
+        write('0- No Transparent pegs\n1-With transparent pegs\n2-Exit\n'),
+        get_char(Transparency),
+        get_char(_),
+        isValidTransparency(Transparency, Is_ok),
+        !,Is_ok = ok;
+        !,
+        write('Invalid Option, try again\n'),
+        getTransparency(Transparency).
+        
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -66,9 +98,11 @@ start:-
         getSize(NLines, NColumns),
         checkValidSize(NLines, NColumns, Is_ok),
         Is_ok= ok,
-        solve(SolveBoard, NLines, NColumns , 1),
-        print_tab(SolveBoard), !;
-        write('You chose an invalid option or board size\n\n\n'),
+        getTransparency(Transparency),
+        solve(SolveBoard, NLines, NColumns , Transparency),
+        (print_tab(SolveBoard);
+        write('You chose an invalid option or board size\n\n\n')),
+        !,
         start.
 
 
@@ -106,9 +140,9 @@ applyConstraints(FlatBoard,NrLines,NrColumns,UseTransparent):-
         %apply domain constraints
         (UseTransparent = 0,!,domain(FlatBoard,1,UpperValue);domain(FlatBoard,0,UpperValue)),
         inflate(Inflated, FlatBoard,NrLines,NrColumns),
-        applyLineConstraints(Inflated),
-        applyColumnConstraints(Inflated,NrColumns),
-        applyDiagonalConstraints(Inflated,NrLines,NrColumns).
+        applyLineConstraints(Inflated,UseTransparent),
+        applyColumnConstraints(Inflated,NrColumns,UseTransparent),
+        applyDiagonalConstraints(Inflated,NrLines,NrColumns,UseTransparent).
 
         
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -116,12 +150,12 @@ applyConstraints(FlatBoard,NrLines,NrColumns,UseTransparent):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Apply Line Constraints
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%        
-applyLineConstraints([BoardHead|BoardTail]):-
-        all_distinct(BoardHead),
+applyLineConstraints([BoardHead|BoardTail],UseTransparent):-
+        custom_all_distinct(BoardHead,UseTransparent,0),
         !,
-        applyLineConstraints(BoardTail).
+        applyLineConstraints(BoardTail,UseTransparent).
 
-applyLineConstraints([]).
+applyLineConstraints([],_).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -147,17 +181,17 @@ getColumn([],Col,_,Tmp):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-applyColumnConstraints(Board,NrColumns):-
-        applyColumnConstraints(Board,NrColumns,0).
+applyColumnConstraints(Board,NrColumns,UseTransparent):-
+        applyColumnConstraints(Board,NrColumns,0,UseTransparent).
 
-applyColumnConstraints(Board,NrColumns,Nr):-
+applyColumnConstraints(Board,NrColumns,Nr,UseTransparent):-
         Nr<NrColumns,
         getColumn(Board,Col,Nr),
-        all_distinct(Col),
+        custom_all_distinct(Col,UseTransparent,0),
         NewNr is Nr+1,
         !,
-        applyColumnConstraints(Board,NrColumns,NewNr).
-applyColumnConstraints(_,NrColumns,NrColumns).
+        applyColumnConstraints(Board,NrColumns,NewNr,UseTransparent).
+applyColumnConstraints(_,NrColumns,NrColumns,_).
 
 
         
@@ -268,33 +302,33 @@ getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr,Tmp,CurrentLine,Current
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-applyDiagonalConstraints(Board,NrLines,NrColumns):-
-        applyRDiagonalConstraints(Board,NrLines,NrColumns,1),
-        applyLDiagonalConstraints(Board,NrLines,NrColumns,1).
+applyDiagonalConstraints(Board,NrLines,NrColumns,UseTransparent):-
+        applyRDiagonalConstraints(Board,NrLines,NrColumns,1,UseTransparent),
+        applyLDiagonalConstraints(Board,NrLines,NrColumns,1,UseTransparent).
 
 
-applyRDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr):-
+applyRDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr,UseTransparent):-
         max_member(Max,[NrLines,NrColumns]),
         DiagonalNr<2*Max-2,
         NextDiagonalNr is DiagonalNr +1,
         getRDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr),
-        all_distinct(Diagonal),
+        custom_all_distinct(Diagonal,UseTransparent,0),
         !,
-        applyRDiagonalConstraints(Board,NrLines,NrColumns,NextDiagonalNr).
-applyRDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr):-
+        applyRDiagonalConstraints(Board,NrLines,NrColumns,NextDiagonalNr,UseTransparent).
+applyRDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr,_):-
         max_member(Max,[NrLines,NrColumns]),
         DiagonalNr>=2*Max-2.
 
 
-applyLDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr):-
+applyLDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr,UseTransparent):-
         max_member(Max,[NrLines,NrColumns]),
         DiagonalNr<2*Max-2,
         NextDiagonalNr is DiagonalNr +1,
         getLDiagonal(NrLines,NrColumns,Board,Diagonal,DiagonalNr),
-        all_distinct(Diagonal),
+        custom_all_distinct(Diagonal,UseTransparent,0),
         !,
-        applyLDiagonalConstraints(Board,NrLines,NrColumns,NextDiagonalNr).
-applyLDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr):-
+        applyLDiagonalConstraints(Board,NrLines,NrColumns,NextDiagonalNr,UseTransparent).
+applyLDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr,_):-
         max_member(Max,[NrLines,NrColumns]),
         DiagonalNr>=2*Max-2.
 

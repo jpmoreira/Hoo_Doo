@@ -4,13 +4,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
 
-tab_map(x):- write(' ').
-tab_map(NUM):- write(NUM).
 
+tab_map(NUM):- 
+        write(NUM).
+%tab_map(_):- write('0').
 
 
 print_line([X|[]]):- 
-  X < 10,
+        X < 10,
     write('|  '),
     tab_map(X),
     write(' |').
