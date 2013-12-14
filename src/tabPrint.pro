@@ -68,7 +68,6 @@ print_column_index(ASCIICode,I):-
 
 
 print_tab_aux([X|[]], 1, Ci):-
-  nl,
   write('    '),
   print_empty_line(Ci), nl,
   write(' '), write(1), write(' '),

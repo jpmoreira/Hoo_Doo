@@ -105,7 +105,7 @@ start:-
         Is_ok= ok,
         getTransparency(Transparency),
         Transparency \= bad,
-        solve(SolveBoard, NLines, NColumns , Transparency), !,
+        solve(SolveBoard, NLines, NColumns , Transparency), !, nl,
         print_tab(SolveBoard);
         write('You chose an invalid option or board size\n\n\n'),
         !,
