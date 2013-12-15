@@ -1,6 +1,8 @@
 % !TeX spellcheck = pt_BR
 \documentclass{llncs}
 \usepackage{llncsdoc}
+
+\usepackage{graphicx}
 %
 \begin{document}
 
@@ -43,11 +45,11 @@ O jogo Hoo-Doo foi criado pela empresa Tryne Games, lan\c{c}ado na d\'{e}cada de
 
 \section{Vari\'{a}veis de Decis\~{a}o}
 
-Para modelar o problema em causa, usamos uma vari\'{a}vel por cada posi\c{c}\~{a}o no tabuleiro, perfazendo para um tabuleiro $n * m$, $n * m$ vari\'{a}veis.O dom\'{i}nio dessas vari\'{a}veis depende tamb\'{e}m ele do tamanho do tabuleiro, sendo que existem para cada tipo de tabuleiro dois dom\'{i}nios distintos dependendo de o jogo ser resolvido usando pe\c{c}as transparentes ou n\~{a}o.
+Para modelar o problema em causa, usamos uma vari\'{a}vel por cada posi\c{c}\~{a}o no tabuleiro, perfazendo para um tabuleiro $n * m$ (onde n \'{e} a altura do tabuleiro e m \'{e} a largura do mesmo), $n * m$ vari\'{a}veis.O dom\'{i}nio dessas vari\'{a}veis depende tamb\'{e}m ele do tamanho do tabuleiro, sendo que existem para cada tipo de tabuleiro dois dom\'{i}nios distintos dependendo de o jogo ser resolvido usando pe\c{c}as transparentes ou n\~{a}o.
 Para o caso de serem usadas pe\c{c}as transparentes o dom\'{i}nio de cada uma das vari\'{a}veis \'{e} $[0,n]$.
 No caso de se recorrer somente a pe\c{c}as com cor o dom\'{i}nio de cada uma das vari\'{a}veis passa a ser $[1,n]$.
 
-No caso de o jogo ser resolvido recorrendo aos \emph{pegs} transparentes \'{e} ainda utilizada uma vari\'{a}vel extra, que \'{e} a soma do valor de todas as outras. Na resolu\c{c}\~{a}o do jogo tentar-se-\`{a} minimizar o valor desta vari\'{a}vel que tem um dom\'{i}nio que \'{e} $[0,n^3]$ num tabuleiro de $n * m$ onde n \'{e} a maior dimens\~{a}o. 
+No caso de o jogo ser resolvido recorrendo aos \emph{pegs} transparentes \'{e} ainda utilizada uma vari\'{a}vel extra, vari\'{a}vel essa que conta o n\'{u}mero de \emph{pegs} transparentes no tabuleiro. O dom\'{i}mio desta vari\'{a}vel vai desde zero at\'{e} $n^2$, caso em que todas as pe\c{c}as do tabuleiro s\~{a}o \emph{pegs} transparentes.
 
 \section{Restri\c{c}\~{o}es}
 
@@ -64,11 +66,32 @@ A restri\c{c}\~{a}o flex\'{i}vel, diz respeito \'{a} tentativa de minimizar o n\
 
 A implementa\c{c}\~{a}o das restri\c{c}\~{o}es r\'{i}gidas \'{e} feita agrupando as vari\'{a}veis em listas, ora por linha, ora por coluna, ora por diagonal , e chamando o predicado \emph{all\_distinct} sobre essas listas, obrigando assim que nunca hajam duas pe\c{c}as que partilhem a mesma linha/coluna/diagonal que tenham o mesmo valor.
 
-A implementa\c{c}\~{a}o da restri\c{c}\~{a}o flex\'{i}vel, \'{e} feita pela introdu\c{c}\~{a}o de uma vari\'{a}vel antes do \emph{labeling}, a qual se passa ao predicado \emph{sum} para que represente a soma do valor de todas as vari\'{a}veis do tabuleiro. Ap\'{o}s a aplica\c{c}\~{a}o desta restri\c{c}\~{a}o o \emph{labeling} \'{e} chamado dentro do \emph{min}, permitindo assim obter a solu\c{c}\~{a}o cuja soma dos valores das pe\c{c}as \'{e} maior, valor esse que necess\'{a}riamente inclui o menor n\'{u}mero poss\'{i}vel de pe\c{c}as transparente (pe\c{c}as com o valor zero).
+A implementa\c{c}\~{a}o da restri\c{c}\~{a}o flex\'{i}vel, \'{e} feita pela introdu\c{c}\~{a}o de uma vari\'{a}vel antes do \emph{labeling}, a qual se passa ao predicado \emph{count} , com o intuito de contar o n\'{u}mero de pe\c{c}as com valor zero no tabuleiro (n\'{u}mero de pegs transparentes).
+
+Esta \'{u}ltima restri\c{c}\~{a}o, \'{e} implementada por meio da tentativa de minimiza\c{c}\~{a}o do valor da vari\'{a}vel supra mencionada. Este efeito \'{e} conseguido passando como op\c{c}\~{a}o de \emph{labeling} o predicado \emph{minimize} passando-lhe a vari\'{a}vel criada propositadamente para o efeito. Esta restri\c{c}\~{a}o permite assim tentar sempre obter a solu\c{c}\~{a}o para o tabuleiro que usa menos \emph{pegs} transparentes.  
 
 \section{Estrat\'{e}gia de Pesquisa}
 
-A estrat\'{e}gia utilizada para a etiquetagem das vari\'{a}veis foi tentar atribuir valores primeiro, \'{a}quelas que est\~{a}o mais restritas por forma a tenta minimizar a \'{a}rvore de pesquisa, "cortando" n\'{o}s o mais cedo poss\'{i}vel. Isto \'{e} conseguido usando a op\c{c}\~{a}o \emph{ffc} que tenta atribuir valores primeiro \'{a}s vari\'{a}veis com um dom\'{i}nio menor, sendo que o crit\'{e}rio de desempate seleciona a vari\'{a}vel com mais restri\c{c}\~{o}es suspensas.
+Na estrat\'{e}gia de pesquisa utilizada, quanto o jogo \'{e} jogado com a possibilidade de introduzir \emph{pegs} transparentes, optamos por incluir as seguintes op\c{c}\~{o}es para a etiquetarem das vari\'{a}veis:
+
+\begin{itemize}
+\item \emph{down} : permitindo assim que o dom\'{i}nio seja percorrido em ordem descendente;
+\item \emph{minimize(X)} : para aplicar a restri\c{c}\~{a}o flex\'{i}vel ;
+\item \emph{time\_out(Time,Flags)} : para evitar que a execu\c{c}\~{a}o se prolongue por tempo indeterminado;
+\item \emph{ffc} : para tentar falhar o mais rapidamente poss\'{i}vel na pesquisa de uma solu\c{c}\~{a}o;
+\end{itemize}
+
+O \emph{down} foi utilizado por raz\~{o}es obvias: como as \emph{pegs} transparentes s\~{a}o codificadas com o n\'{u}mero zero, e como o dom\'{i}nio das vari\'{a}veis vai tipicamente de zero at\'{e} n, em que n \'{e} o lado do tabuleiro, ao percorrer o dom\'{i}nio de valores maiores at\'{e} zero obtemos melhores resultados mais r\'{a}pidamente em geral. Isto tendo em conta que uma melhor solu\c{c}\~{a}o \'{e} aquela que usa menos \emph{pegs} transparentes.
+
+O \emph{minimize(X)} foi tamb\'{e}m ele utilizado por raz\~{o}es j\'{a} explicadas anteriormente, que se prendem com a necessidade de tentar encontrar a solu\c{c}\~{a}o que minimiza o n\'{u}mero de \emph{pegs} transparentes. Nesse sentido a vari\'{a}vel que \'{e} passada ao predicado \emph{minimize(X)} \'{e} a vari\'{a}vel que conta o n\'{u}mero de zeros no tabuleiro. 
+
+O predicado \emph{time\_out(Time,Flags)} \'{e} usado para que a execu\c{c}\~{a}o n\~{a}o decorra indeterminadamente. Com esse fim \'{e} passado ao predicado o valor de \emph{120000} que faz com que o \emph{labeling} decorra  durante no m\'{a}ximo 2 minutos e retorne ent\~{a}o, sen\~{a}o antes, a melhor solu\c{c}\~{a}o at\'{e} ao momento.
+
+A op\c{c}\~{a}o \emph{ffc} foi utilizada na tentativa de tentar que fossem atribu\'{i}dos primeiro valores as vari\'{a}veis mais restritas, tentando assim "cortar" mais ramos da \'{a}rvore de pesquisa, ao falhar mais cedo.
+
+Como \'{e} referido na sec\c{c}\~{a}o pr\'{o}pria, verificamos que a utiliza\c{c}\~{a}o de outras op\c{c}\~{o}es como por exemplo \emph{bisect} , resulta em resultados ligeiramente menos satisfat\'{o}rios.
+
+Quando \'{e} usado o \emph{bisect} a performance \'{e} sensivelmente pior do que no caso de se usar a sele\c{c}\~{a}o de vari\'{a}veis por defeito, provavelmente porque o beneficio que tr\'{a}s \'{e} quase nulo, e o custo do seu calculo \'{e} naturalmente algum, ainda que diminuto, causando ent\~{a}o uma pequena degrada\c{c}\~{a}o da performance.
 
 \section{Visualiza\c{c}\~{a}o}
 %
@@ -85,11 +108,263 @@ Existem seis predicados utilizados para a constru\c{c}\~{a}o visual do tabuleiro
 
 \section{Resultados}
 
-(TODO: A espera de resultados de colegas para fazer a compara\c{c}ão)
+
+No processo de desenvolvimento do solver fizemos v\'{a}rios testes utilizando v\'{a}rias op\c{c}\~{o}es de etiquetarem das vari\'{a}veis, por forma a tentar obter o melhor resultado poss\'{i}vel, o mais rapidamente poss\'{i}vel, na maioria dos casos.
+O estudo que fizemos, centrou-se principalmente no caso em que \'{e} poss\'{i}vel usar \emph{pegs} transparentes, tentando no entanto minimizar o seu uso, por este ser o caso mais interessante.
+Dividimos o estudo em duas partes, na primeira parte analisamos o comportamento das v\'{a}rias op\c{c}\~{o}es tendo em conta parâmetros como o n\'{u}mero de \emph{backtracks} ou o tempo de execu\c{c}\~{a}o, sendo este estudo feito para aqueles tabuleiros com que conseguimos garantidamente alcan\c{c}ar uma solu\c{c}\~{a}o optima.
+A segunda parte do estudo consistiu na compara\c{c}\~{a}o do n\'{u}mero de \emph{pegs} transparentes utilizado na resolu\c{c}\~{a}o de alguns dos problemas para os quais n\~{a}o temos uma solu\c{c}\~{a}o optima, isto utilizando tamb\'{e}m diferentes op\c{c}\~{o}es de etiquetagem.
+Esta divis\~{a}o deveu-se a que, em problemas em que a solu\c{c}\~{a}o encontrada n\~{a}o \'{e} optima, de pouco interessa saber m\'{e}tricas como o n\'{u}mero de \emph{backtracks} ou o tempo de execu\c{c}\~{a}o (que ser\'{a} sempre o mesmo), interessa ao inv\'{e}s disso saber qual a melhor solu\c{c}\~{a}o de todas as encontradas com as diversas op\c{c}\~{o}es.
+
+No que diz respeito aos problemas para os quais se tem uma resolu\c{c}\~{a}o optima, verificou-se que o \emph{down} leva \`{a} mais r\'{a}pida resolu\c{c}\~{a}o do problema na maior parte dos casos. Facto que pode ser verificado comparando os dados das tabelas \ref{tabela:1}, \ref{tabela:2}, \ref{tabela:3} e \ref{tabela:4}. Isto no entanto n\~{a}o se verifica para tamanhos de tabuleiros maiores, nomeadamente, para tamanhos superiores a 6x6, onde a etiquetagem com as op\c{c}\~{o}es \emph{down} e \emph{ffc} revela-se a mais r\'{a}pida e a que tem consistentemente melhores resultados. Esse facto come\c{c}a-se a observar no tabuleiro 7x7 onde a etiquetagem com as op\c{c}\~{o}es supra referidas come\c{c}a j\'{a} a ser melhor e mais r\'{a}pida que as outras, resultando em que o tempo de execu\c{c}\~{a}o seja menor, isto embora o n\'{u}mero de \emph{prunings} seja menor e o n\'{u}mero de \emph{backtracks} maior. Esta tend\^{e}ncia torna-se evidente para os tabuleiros de maior tamanho onde nunca se chega a alcan\c{c}ar uma solu\c{c}\~{a}o optima mas, onde os resultados da etiquetarem com as op\c{c}\~{o}es \emph{down} e \emph{ffc} d\~{a}o solu\c{c}\~{o}es francamente melhores. Esses factos podem ser observados principalmente nas tabelas \ref{tabela:5}, \ref{tabela:6}, \ref{tabela:7}, \ref{tabela:8} e \ref{tabela:9}, tabelas essas onde se mostram o n\'{u}mero de \emph{pegs} transparentes utilizadas em resolu\c{c}\~{o}es com alguns tempos de dura\c{c}\~{a}o m\'{a}ximos selecionados. Nessas tabelas \'{e} not\'{o}rio o beneficio de usar a combina\c{c}\~{a}o de op\c{c}\~{o}es supra mencionadas pois produzem consistentemente resolu\c{c}\~{o}es melhores (com menos \emph{pegs} transparentes) e mais cedo do que as outras combina\c{c}\~{o}es. Esse facto \'{e} tamb\'{e}m aludido nos gr\'{a}ficos apresentados, (\ref{graf1}, \ref{graƒf2} e \ref{graf3} ), onde se pode ver que claramente a pior op\c{c}\~{a}o de entre as testadas \'{e} utilizar os parâmetros por defeito, que retornam consistentemente piores resultados que qualquer uma das outras op\c{c}\~{o}es. De entre as outras op\c{c}\~{o}es na grande maioria dos casos, a alternativa que usa as op\c{c}\~{o}es \emph{down} juntamente com \emph{ffc} obtem ligeiramente melhores resultados.
+A op\c{c}\~{a}o de usar a combina\c{c}\~{a}o de op\c{c}\~{o}es \emph{down} com \emph{ffc} e \emph{bisect} em simultâneo (n\~{a}o inclu\'{i}da em nenhum dos gr\'{a}ficos por uma quest\~{a}o de clareza dos mesmo) foi estudada com a ajuda da tabela \ref{tabela:9}, no entanto os resultados que se conseguem obter s\~{a}o em tudo semelhantes aos em que se utiliza somente \emph{down} e \emph{ffc}, sendo que em alguns casos tem resultados ligeiramente piores, e noutros ligeiramente melhores, pelo que n\~{a}o \'{e} uma op\c{c}\~{a}o claramente vantajosa.
+
+
+
+
+
+
+
 
 \section{Conclus\~{o}es}
 
-(TODO: A espera dos resultados)
+Com a realiza\c{c}\~{a}o do presente trabalho pud\'{e}mos verificar a simplicidade e elegância com que, a programa\c{c}\~{a}o em l\'{o}gica com restri\c{c}\~{o}es, nos permite implementar solu\c{c}\~{o}es para problemas como o \emph{Hoo$-$Doo}.
+A implementa\c{c}\~{a}o \'{e} n\~{a}o s\'{o} compacta, facilmente leg\'{i}vel, como \'{e} tamb\'{e}m de uma elegância e simplicidade que n\~{a}o seria facilmente alcan\c{c}avel com o uso de uma linguagem imperativa como \emph{C} ou \emph{Java}.
+Parece-nos no entanto, que essa simplicidade acarreta alguns custos a n\'{i}vel de performance, uma vez que nos parece, isto no entanto sem termos dados concretos que sustentem esta hip\'{o}tese, que uma implementa\c{c}\~{a}o numa linguagem imperativa do tipo \emph{C}, utilizando um algoritmo adequada, teria uma performance bastante melhor.
+\'{e} no entanto indiscut\'{i}vel, a vantagem de utilizar PLR nesta situa\c{c}\~{a}o, uma vez que a implementa\c{c}\~{a}o do \emph{solver} \'{e} muito mais r\'{a}pida.
+Tivemos ainda oportunidade de atestar a versatilidade que as op\c{c}\~{o}es do predicado \emph{labeling} trazem \'{a} resolu\c{c}\~{a}o deste tipo de problemas, dotando o programador da possibilidade de fazer pequenos ajustes que permitem melhorar dramaticamente a performance do programa.
+Caso tiv\'{e}ssemos tido mais tempo poder\'{i}amos eventualmente fazer uma r\'{a}pida implementa\c{c}\~{a}o de um solver numa linguagem imperativa, para termos uma no\c{c}\~{a}o mais exacta de quais as diferen\c{c}as em termos de performance que existem entre estes dois tipos de abordagens, atestando assim a aplicabilidade e utilidade da PLR em situa\c{c}\~{o}es semelhantes a esta.
+\nocite{sicstusManual}
+\nocite{hooDoo}
+
+
+
+\clearpage
+\addcontentsline{toc}{section}{Bibliografia}
+\renewcommand\refname{Bibliografia}
+\bibliographystyle{plain}
+\bibliography{refs.bib}
+
+
+\newpage
+\appendix
+
+
+
+\section{Tabelas e Gr\'{a}ficos}
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{Problemas com solu\c{c}\~{a}o optima : Op\c{c}\~{o}es por defeito} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+M\'{e}trica & 2x2 & 3x3 & 4x4 & 5x5 & 7x7\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+Runtime & 10 & 10 & 125 & 10 & 10900 \\ % inserting body of the table 
+Resumptions & 304 & 9141 & 478328 & 16882 & 33054848 \\ 
+Entailments & 161 & 4669 & 234053 & 9878 & 29865115  \\ 
+Prunings & 205 & 5126 & 240508 & 10307 & 17858406 \\ 
+Backtracks & 8 & 129 & 3194 & 194 & 346785 \\ 
+Constraints & 27 & 103 & 261 & 531 & 1527 \\ [1ex] % [1ex] adds vertical space 
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:1} % is used to refer this table in the text 
+\end{table}
+
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{Problemas com solu\c{c}\~{a}o optima : Op\c{c}\~{a}o \emph{down}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+M\'{e}trica & 2x2 & 3x3 & 4x4 & 5x5 & 7x7\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+Runtime & 10 & 10 & 125 & 10 & 10900 \\
+Resumptions & 304 & 9141 & 478328 & 16882 & 33054848 \\
+Entailments & 161 & 4669 & 234053 & 9878 & 29865115 \\
+Prunings & 205 & 5126 & 240508 & 10307 & 17858406 \\
+Backtracks & 8 & 129 & 3194 & 194 & 346785 \\
+Constraints & 27 & 103 & 261 & 531 & 1527 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:2} % is used to refer this table in the text 
+\end{table}
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{Problemas com solu\c{c}\~{a}o optima : Op\c{c}\~{o}es \emph{down} e \emph{ffc}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+M\'{e}trica & 2x2 & 3x3 & 4x4 & 5x5 & 7x7\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+Runtime & 10 & 10 & 90 & 10 & 59180 \\
+Resumptions & 286 & 7667 & 268519 & 14254 & 295555138 \\
+Entailments & 134 & 3776 & 139331 & 6073 & 127518166 \\
+Prunings & 177 & 4180 & 139466 & 6244 & 118181814 \\
+Backtracks & 5 & 90 & 1748 & 107 & 1727869 \\
+Constraints & 27 & 103 & 261 & 531 & 1527 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:3} % is used to refer this table in the text 
+\end{table}
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{Problemas com solu\c{c}\~{a}o optima : Op\c{c}\~{o}es \emph{down} e \emph{bisect}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+M\'{e}trica & 2x2 & 3x3 & 4x4 & 5x5 & 7x7\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+Runtime & 10 & 10 & 80 & 10 & 117930 \\
+Resumptions & 286 & 8438 & 277571 & 9634 & 491394424 \\
+Entailments & 134 & 4114 & 133215 & 3656 & 249165687 \\
+Prunings & 182 & 4565 & 136734 & 3896 & 225597907 \\
+Backtracks & 5 & 102 & 1611 & 51 & 1036895 \\
+Constraints & 27 & 103 & 261 & 531 & 1527 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:4} % is used to refer this table in the text 
+\end{table}
+
+
+
+
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{N\'{u}mero de \emph{pegs} transparentes usadas apos timeout : Op\c{c}\~{o}es por defeito} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+Tempo(s) & 6x6 & 8x8 & 9x9 & 10x10 & 11x11 & 20x20\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+2 & 7 & 11 & 18 & 25 & 32 & 265 \\
+10 & 7 & 8 & 16 & 22 & 30 & 248 \\
+120 & 6 & 8 & 13 & 21 & 24 & 185 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:5} % is used to refer this table in the text 
+\end{table}
+
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{N\'{u}mero de \emph{pegs} transparentes usadas apos timeout : Op\c{c}\~{o}es \emph{down}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+Tempo(s) & 6x6 & 8x8 & 9x9 & 10x10 & 11x11 & 20x20\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+2 & 6 & 11 & 16 & 21 & 26 & 79 \\
+10 & 4 & 11 & 16 & 20 & 26 & 78 \\
+120 & 4 & 7 & 15 & 19 & 26 & 78 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:6} % is used to refer this table in the text 
+\end{table}
+
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht] 
+\caption{N\'{u}mero de \emph{pegs} transparentes usadas apos timeout : Op\c{c}\~{o}es \emph{down} e \emph{ffc}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+Tempo(s) & 6x6 & 8x8 & 9x9 & 10x10 & 11x11 & 20x20\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+2 & 5 & 11 & 12 & 17 & 21 & 68 \\
+10 & 4 & 11 & 11 & 17 & 21 & 68 \\
+120 & 4 & 11 & 11 & 16 & 21 & 67 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:7} % is used to refer this table in the text 
+\end{table}
+
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht!] 
+\caption{N\'{u}mero de \emph{pegs} transparentes usadas apos timeout : Op\c{c}\~{o}es \emph{down} e \emph{bisect}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+Tempo(s) & 6x6 & 8x8 & 9x9 & 10x10 & 11x11 & 20x20\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+2 & 6 & 11 & 16 & 21 & 26 & 78 \\
+10 & 4 & 11 & 16 & 20 & 26 & 78 \\
+120 & 4 & 7 & 15 & 19 & 24 & 78 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:8} % is used to refer this table in the text 
+\end{table}
+
+
+\setlength{\tabcolsep}{12pt}
+\begin{table}[ht!] 
+\caption{N\'{u}mero de \emph{pegs} transparentes usadas apos timeout : Op\c{c}\~{o}es \emph{down}, \emph{bisect} e \emph{ffc}} % title of Table 
+\centering % used for centering table 
+\begin{tabular}{c c c c c c c} % centered columns (4 columns) 
+\hline\hline %inserts double horizontal lines 
+
+Tempo(s) & 6x6 & 8x8 & 9x9 & 10x10 & 11x11 & 20x20\\ [0.5ex] % inserts table 
+%heading 
+\hline % inserts single horizontal line 
+2 & 5 & 11 & 12 & 18 & 21 & 68 \\
+10 & 4 & 11 & 11 & 18 & 21 & 67 \\
+120 & 4 & 11 & 11 & 17 & 21 & 67 \\[1 ex]
+\hline %inserts single line 
+\end{tabular} 
+\label{tabela:9} % is used to refer this table in the text 
+\end{table}
+
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=90mm]{grafico3.png}
+\caption{N\'{u}mero de \emph{pegs} transparentes ao fim de 1 segundo}
+\label{graf1}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=90mm]{grafico2.png}
+\caption{N\'{u}mero de \emph{pegs} transparentes ao fim de 2 segundos}
+\label{graf2}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=90mm]{grafico1.png}
+\caption{N\'{u}mero de \emph{pegs} transparentes ao fim de 2 minutos}
+\label{graf3}
+\end{figure}
+
+
+
+
+
+
 
 
 \end{document}
