@@ -364,6 +364,3 @@ applyLDiagonalConstraints(Board,NrLines,NrColumns,DiagonalNr,UseTransparent):-
 applyLDiagonalConstraints(_,NrLines,NrColumns,DiagonalNr,_):-
         max_member(Max,[NrLines,NrColumns]),
         DiagonalNr>=2*Max-2.
-
-
-%       TODO non square version!!!!!!
